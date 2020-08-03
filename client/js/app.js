@@ -1,6 +1,6 @@
 /*global Vue, todoStorage */
 
-API = "http://localhost:5000/todo";
+API = "/api/todo";
 
 (function (exports) {
 
