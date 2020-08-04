@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request
 var TYPES = require('tedious').TYPES;
@@ -26,6 +28,7 @@ module.exports = function (context, req) {
     connection.on('connect', err => {
         if (err) {
             context.log(err);
+            context.done();
         }
         else {
             executeStatement(req.body);
