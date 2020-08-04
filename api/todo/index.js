@@ -7,17 +7,17 @@ module.exports = function (context, req) {
     var result = "";
 
     var connection = new Connection({
-        server: '172.29.179.73',
+        server: process.env["server"],
         authentication: {
             type: 'default',
             options: {
-                userName: 'sa',
-                password: 'Passw0rd!',
+                userName: process.env["userName"],
+                password: process.env["password"],
             }
         },
         options: {
-            database: "ToDo01",
-            encrypt: false
+            database: process.env["database"],
+            encrypt: true
         }
     });
 
@@ -33,7 +33,7 @@ module.exports = function (context, req) {
     });
     
     function executeStatement(p1) {
-        request = new Request("dbo.get_todo", (err, rowCount) => {
+        request = new Request("dbo.get_todo", (err) => {
             if (err) {
                 context.log(err);
             }
