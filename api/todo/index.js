@@ -33,7 +33,7 @@ module.exports = function (context, req) {
     });
     
     function executeStatement(p1) {
-        request = new Request("dbo.get_todo", function (err, rowCount) {
+        request = new Request("dbo.get_todo", (err, rowCount) => {
             if (err) {
                 context.log(err);
             }
@@ -44,13 +44,9 @@ module.exports = function (context, req) {
             context.done();
         });
 
-        request.on('row', function (columns) {
-            columns.forEach(function (column) {
-                if (column.value === null) {
-                    console.log('NULL');
-                } else {
-                    result += column.value;
-                }
+        request.on('row', columns => {
+            columns.forEach(column => {
+                result += column.value;                
             });
         });
 
