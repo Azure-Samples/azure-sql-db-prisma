@@ -4,21 +4,21 @@ var Connection = require('tedious').Connection;
 var Request = require('tedious').Request
 var TYPES = require('tedious').TYPES;
 
-module.exports = function (context, req) {
+getTodo = function (context, req) {
     const toDo = req.body;
-    var result = "";
+    var result = "";    
 
     var connection = new Connection({
-        server: process.env["server"],
+        server: process.env["db_server"],
         authentication: {
             type: 'default',
             options: {
-                userName: process.env["userName"],
-                password: process.env["password"],
+                userName: process.env["db_user"],
+                password: process.env["db_password"],
             }
         },
         options: {
-            database: process.env["database"],
+            database: process.env["db_database"],
             encrypt: true
         }
     });
@@ -56,3 +56,7 @@ module.exports = function (context, req) {
         connection.execSql(request);
     }   
 }
+
+module.exports = getTodo;
+
+
