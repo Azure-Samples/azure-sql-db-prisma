@@ -41,7 +41,9 @@ const executeSQL = (context, verb, payload) => {
                 context.done();
             });
         
-            request.addParameter('payload', TYPES.NVarChar, JSON.stringify(payload), Infinity);
+            if (payload != '' && payload != null) 
+                payload = JSON.stringify(payload)
+            request.addParameter('payload', TYPES.NVarChar, payload, Infinity);
         
             request.on('row', columns => {
                 columns.forEach(column => {

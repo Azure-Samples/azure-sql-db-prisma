@@ -1,6 +1,7 @@
 /*global Vue, todoStorage */
 
-API = "/api/todo";
+API = "http://localhost:7071/api/todo";
+HEADERS = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
 
 (function (exports) {
 
@@ -20,7 +21,7 @@ API = "/api/todo";
 				return todo.completed;
 			});
 		}
-	};
+	};	
 
 	exports.app = new Vue({
 
@@ -29,17 +30,19 @@ API = "/api/todo";
 
 		// app initial state
 		data: {
-			todos: todoStorage.fetch(),
+			todos: [],
 			newTodo: '',
 			editedTodo: null,
 			visibility: 'all'
 		},
 
-		// watch todos change for localStorage persistence
+		//watch todos change for localStorage persistence
 		watch: {
 			todos: {
 				deep: true,
-				handler: todoStorage.save
+				handler: function(todo) {
+					console.log(todo);
+				}
 			}
 		},
 
@@ -64,6 +67,18 @@ API = "/api/todo";
 			}
 		},
 
+		// initialize data 
+		// by loading it from REST API
+		created: function() {
+			fetch(API + "/", {headers: HEADERS, method: "POST", body: ''})
+			.then(res => {
+				return res.json();
+			})
+			.then(res => {				
+				this.todos = res;
+			})
+		},
+
 		// methods that implement data logic.
 		// note there's no DOM manipulation here at all.
 		methods: {
@@ -77,24 +92,27 @@ API = "/api/todo";
 				if (!value) {
 					return;
 				}
-				fetch(API + "/", {
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'						
-					},
-					method: "POST",
-					body: JSON.stringify({ title: value })
-				}).then(res => {
-					if (res.status < 500) {
-						this.todos.push({ id: this.todos.length + 1, title: value, completed: false })
+				fetch(API + "/", {headers: HEADERS, method: "POST", body: JSON.stringify({title: value})}).
+				then(res => {					
+					if (res.status < 500) {												
 						this.newTodo = ''
+						return res.json();
 					}
+				}).then(res => {
+					console.log(res[0])
+					this.todos.push(res[0]);
 				})
 			},
 
 			removeTodo: function (todo) {
 				var index = this.todos.indexOf(todo);
-				this.todos.splice(index, 1);
+				var id  = todo.id;
+				fetch(API + `/${id}`, {headers: HEADERS, method: "DELETE"}).
+				then(res => {
+					if (res.status < 500) {
+						this.todos.splice(index, 1);
+					}
+				})				
 			},
 
 			editTodo: function (todo) {
@@ -120,7 +138,7 @@ API = "/api/todo";
 
 			removeCompleted: function () {
 				this.todos = filters.active(this.todos);
-			}
+			}			
 		},
 
 		// a custom directive to wait for the DOM to be updated

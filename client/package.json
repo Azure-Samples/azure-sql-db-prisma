@@ -1,12 +1,21 @@
 {
+  "name": "todo-client-vue",
+  "version": "1.0.0",
+  "main": "index.html",
   "private": true,
+  "scripts": {
+    "start": "serve",
+    "build": "install"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^11.2.0"
+  },
   "dependencies": {
     "director": "^1.2.0",
     "todomvc-app-css": "^2.0.0",
     "todomvc-common": "^1.0.1",
-    "vue": "^2.1.8"
-  },
-  "scripts": {
-    "build": "npm install"
+    "vue": "^2.6.11"
   }
 }

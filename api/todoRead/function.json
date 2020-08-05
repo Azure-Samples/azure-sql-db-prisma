@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "todo/{id:int}"
+      "route": "todo/{id:int?}"
     },
     {
       "type": "http",
