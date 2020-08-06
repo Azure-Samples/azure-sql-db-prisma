@@ -1,16 +1,16 @@
 drop table if exists dbo.[todos]; 
-drop sequence if exists dbo.[globseq];
+drop sequence if exists dbo.[global_sequence];
 go
 
-create sequence dbo.globseq
+create sequence dbo.[global_sequence]
 as int
 start with 1
-increment by 1
-;
+increment by 1;
+go
 
 create table dbo.todos
 (
-	id int not null primary key default (next value for [globseq]),
+	id int not null primary key default (next value for [global_sequence]),
 	todo nvarchar(100) not null,
 	completed tinyint not null default (0)
 )
@@ -20,9 +20,32 @@ insert into dbo.[todos] (todo)
 values ('azure function nodejs sample')
 go
 
+/*
+	GET
+	Accepted Input: 
+	''
+	'[{"id":1}, {"id":2}]'
+*/
 create or alter procedure dbo.get_todo
-@payload nvarchar(max)
+@payload nvarchar(max) = null
 as
+
+-- return all
+if (@payload = '' or @payload is null) begin
+select 
+	cast(
+		(select
+			id,
+			todo as title,
+			completed as completed
+		from
+			dbo.todos t
+		for json path)
+	as nvarchar(max)) as result;
+	return ;
+end
+
+-- return the specified todos
 if (isjson(@payload) <> 1) begin
 	throw 50000, 'Payload is not a valid JSON document', 16;
 end
@@ -41,7 +64,12 @@ select
 	as nvarchar(max)) as result
 go
 
-create or alter procedure dbo.post_todo
+/*
+	POST
+	Accepted Input: 
+	'[{"id":1, "title":"todo title", "completed": 0}, {"id":2, "title": "another todo"}]'
+*/
+create or alter procedure [dbo].[post_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) != 1) begin
@@ -62,7 +90,12 @@ declare @newPayload as nvarchar(max) = (select id from @ids for json auto);
 exec dbo.[get_todo] @newPayload
 go
 
-create or alter procedure dbo.delete_todo
+/*
+	DELETE
+	Accepted Input: 
+	'[{"id":1}, {"id":2}]'
+*/
+create or alter procedure [dbo].[delete_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) != 1) begin
@@ -73,19 +106,12 @@ delete t from dbo.todos t
 where exists (select p.id from openjson(@payload) with (id int) as p where p.id = t.id)
 go
 
-create or alter procedure dbo.put_todo
-@payload nvarchar(max)
-as
-if (isjson(@payload) != 1) begin
-	throw 50000, 'Payload is not a valid JSON document', 16;
-end
-
-delete t from dbo.todos t 
-where exists (select p.id from openjson(@payload) with (id int) as p where p.id = t.id)
-go
-
-
-create or alter procedure dbo.put_todo
+/*
+	PUT
+	Accepted Input: 
+	'[{"id":1, "todo":{"id": 10, "title": "updated title", "completed": 1 },{...}]'
+*/
+create or alter procedure [dbo].[put_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) <> 1) begin
@@ -130,5 +156,4 @@ inner join
 
 declare @newPayload as nvarchar(max) = (select id from @ids for json auto);
 exec dbo.[get_todo] @newPayload
-go
 
