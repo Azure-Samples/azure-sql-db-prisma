@@ -66,7 +66,7 @@
 		// Full spec-compliant TodoMVC with localStorage persistence
 		// and hash-based routing in ~120 effective lines of JavaScript.
 
-		API = "/api/todo";
+		API = "http://localhost:7071/api/todo";
 		HEADERS = { 'Accept': 'application/json', 'Content-Type': 'application/json' };		
 
 		// visibility filters
@@ -99,7 +99,7 @@
 			// initialize data 
 			// by loading it from REST API
 			created: function() {
-				fetch(API + "/", {headers: HEADERS, method: "POST", body: ''})
+				fetch(API + "/", {headers: HEADERS, method: "GET"})
 				.then(res => {
 					return res.json();
 				})
