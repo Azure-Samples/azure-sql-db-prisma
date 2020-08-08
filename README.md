@@ -1,57 +1,55 @@
-# Project Name
+---
+page_type: sample
+languages:
+- nodejs
+- javascript
+- tsql
+- sql
+products:
+- azure
+- vs-code
+- azure-sql-database
+- azure-functions
+- azure-web-apps
+description: "ToDo MVC Sample app Full Stack implementation using Azure Static WebApps, Azure Functions, Node, Vue.Js and Azure SQL (full JSON support)"
+urlFragment: "azure-sql-db-todo-mvc"
+---
 
-(short, 1-3 sentenced, description of the project)
+<!-- 
+Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
 
-## Features
+Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
 
-This project framework provides the following features:
+Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
+-->
 
-* Feature 1
-* Feature 2
-* ...
+# ToDO MVC Sample App Full Stack Implementation
 
-## Getting Started
+Serverless Full Stack implementation on Azure of [ToDoMVC](http://todomvc.com/) app. 
 
-### Prerequisites
+## Azure Static WebApps, Azure Functions, Node and Azure SQL
 
-(ideally very short, if any)
+The implementation uses
 
-- OS
-- Library version
-- ...
+- Azure Static WebApp: to bind everything together in one easy package, natively integrated with GitHub CI/CD pipeline
+- Vue.Js as front-end client
+- Azure Function for providing serverless back-end infrastructure
+- NodeJS for the back-end logic
+- Azure SQL as database to store ToDo data
 
-### Installation
+## Implementation Details
 
-(ideally very short)
+TDB
 
-- npm install [package name]
-- mvn install
-- ...
+## Running local
 
-### Quickstart
-(Add steps to get up and running quickly)
+TDB
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+## Running on Azure
+
+TDB
 
 
-## Demo
 
-A demo app is included to show how to use the project.
 
-To run the demo, follow these steps:
 
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
