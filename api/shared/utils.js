@@ -24,7 +24,7 @@ const executeSQL = (context, verb, payload) => {
         }
     });
 
-    const request = new Request(`dbo.${verb}_todo`, (err) => {
+    const request = new Request(`web.${verb}_todo`, (err) => {
         if (err) {
             context.log.error(err);
             context.res.status = 500;

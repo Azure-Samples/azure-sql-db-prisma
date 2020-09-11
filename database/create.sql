@@ -1,5 +1,10 @@
-drop table if exists dbo.[todos]; 
-drop sequence if exists dbo.[global_sequence];
+create schema [web];
+go
+
+create user [webapp] with password = 'Super_Str0ng*P@ZZword!'
+go
+
+grant execute on schema::[web] to [webapp]
 go
 
 create sequence dbo.[global_sequence]
@@ -26,7 +31,7 @@ go
 	''
 	'[{"id":1}, {"id":2}]'
 */
-create or alter procedure dbo.get_todo
+create or alter procedure [web].[get_todo]
 @payload nvarchar(max) = null
 as
 
@@ -69,7 +74,7 @@ go
 	Accepted Input: 
 	'[{"id":1, "title":"todo title", "completed": 0}, {"id":2, "title": "another todo"}]'
 */
-create or alter procedure [dbo].[post_todo]
+create or alter procedure [web].[post_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) != 1) begin
@@ -87,7 +92,7 @@ select [title], isnull([completed],0) from openjson(@payload) with
 )
 
 declare @newPayload as nvarchar(max) = (select id from @ids for json auto);
-exec dbo.[get_todo] @newPayload
+exec [web].[get_todo] @newPayload
 go
 
 /*
@@ -95,7 +100,7 @@ go
 	Accepted Input: 
 	'[{"id":1}, {"id":2}]'
 */
-create or alter procedure [dbo].[delete_todo]
+create or alter procedure [web].[delete_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) != 1) begin
@@ -111,7 +116,7 @@ go
 	Accepted Input: 
 	'[{"id":1, "todo":{"id": 10, "title": "updated title", "completed": 1 },{...}]'
 */
-create or alter procedure [dbo].[put_todo]
+create or alter procedure [web].[put_todo]
 @payload nvarchar(max)
 as
 if (isjson(@payload) <> 1) begin
@@ -155,5 +160,5 @@ inner join
 ;
 
 declare @newPayload as nvarchar(max) = (select id from @ids for json auto);
-exec dbo.[get_todo] @newPayload
-
+exec [web].[get_todo] @newPayload
+go
