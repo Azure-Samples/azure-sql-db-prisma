@@ -51,6 +51,8 @@ Folder structure
 
 Execute the `/database/create.sql` script on a database of your choice. Could be a local SQL Server or an Azure SQL running in the cloud. Just make sure the desired database is reachable by your local machine (eg: firewall, authentication and so on), then use SQL Server Management Studio or Azure Data Studio to run the script. 
 
+Of course if you want to deploy the solution on Azure, use Azure SQL.
+
 If you need any help in executing the SQL script on Azure SQL, you can find a Quickstart here: [Use Azure Data Studio to connect and query Azure SQL database](https://docs.microsoft.com/en-us/sql/azure-data-studio/quickstart-sql-database).
 
 If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
@@ -76,12 +78,22 @@ Long story short (make sure you have installed all the prerequisites mentioned i
 - Run Azure Function from within Visual Studio Code (just hit F5 on the `/api` folder)
 - Serve `/client/index.html` using Visual Studio Code Live Server
 
-
 ## Running on Azure
 
-This is the amazing part of using Azure Static WebApps. Deploying to Azure is as easy as committing to GitHub.
+This is the amazing part of using Azure Static WebApps. Deploying to Azure is completely automated via GitHub actions.
 
-
-
-
-
+1. Fork this repository 
+1. Open the Azure Portal
+1. Create a "Static Web App" resource and follow the instruction here: [Building your first static web app in the Azure portal](https://docs.microsoft.com/en-us/azure/static-web-apps/get-started-portal?tabs=vanilla-javascript), but:  
+   - When asked for GitHub repo details, point to the forked repo you just created
+   - Select "main" as branch
+   - Select "Custom" in the "Build Presets" dropdown
+   - Set `client` as "App location"
+1. Wait for resource creation and GitHub action completion. Once the resource is ready, click on "Go to Resource".
+1. Be patient, now GitHub Action will kick in and deploy the full-stack website. It will take a couple of minutes.
+1. Relax.
+1. Grab some coffee or tea.
+1. Drink it.
+1. Click on "Functions" and you should be able to see the `todo` function listed.
+1. Go to the "Configuration" tab and add the same key and values that you have in your `.env` file you created earlier for local execution.
+1. Go to "Overview" and click on "Browse" to open your website. Done!
