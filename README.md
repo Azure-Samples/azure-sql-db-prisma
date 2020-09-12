@@ -35,10 +35,10 @@ The implementation uses
 
 - [Azure Static WebApp](https://azure.microsoft.com/en-us/services/app-service/static/): to bind everything together in one easy package, natively integrated with GitHub CI/CD pipeline
 - [Vue.Js](https://vuejs.org/) as front-end client
-- Azure Function for providing serverless back-end infrastructure
-- NodeJS for the back-end logic
-- Azure SQL as database to store ToDo data
-- GitHub Actions to Deploy the full-stack website (thanks to Azure Static WebApps)
+- [Azure Function](https://azure.microsoft.com/en-us/services/functions/) for providing serverless back-end infrastructure
+- [NodeJS](https://nodejs.org/en/) for the back-end logic
+- [Azure SQL](https://azure.microsoft.com/en-us/services/sql-database/) as database to store ToDo data
+- [GitHub Actions](https://github.com/features/actions) to Deploy the full-stack website (thanks to Azure Static WebApps)
 
 ## Implementation Details
 
