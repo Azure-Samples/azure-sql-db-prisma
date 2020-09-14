@@ -98,3 +98,7 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 1. Click on "Functions" and you should be able to see the `todo` function listed.
 1. Go to the "Configuration" tab and add the same key and values that you have in your `.env` file you created earlier for local execution.
 1. Go to "Overview" and click on "Browse" to open your website. Done!
+
+### Azure Static Web App Preview 
+
+Azure Static Web App are in Preview and at the moment only support a Free tier...which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
