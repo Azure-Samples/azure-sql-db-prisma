@@ -11,7 +11,7 @@ products:
 - azure-sql-database
 - azure-functions
 - azure-web-apps
-description: "ToDo MVC Sample app Full Stack implementation using Azure Static WebApps, Azure Functions, Node, Vue.Js and Azure SQL (full JSON support)"
+description: "TodoMVC Sample app Full Stack implementation using Azure Static WebApps, Azure Functions, Node, Vue.Js and Azure SQL (full JSON support)"
 urlFragment: "azure-sql-db-todo-mvc"
 ---
 
@@ -23,7 +23,7 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-# ToDO MVC Sample App Full Stack Implementation
+# TodoMVC Sample App Full Stack Implementation
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
