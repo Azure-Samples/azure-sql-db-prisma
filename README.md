@@ -5,6 +5,7 @@ languages:
 - javascript
 - tsql
 - sql
+- json
 products:
 - azure
 - vs-code
