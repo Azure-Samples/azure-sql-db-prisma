@@ -11,7 +11,11 @@ const httpTrigger: AzureFunction = async function (
 
   switch (method) {
     case 'get':
-      await getTodo(context, req?.params?.id)
+      if (req?.params?.id) {
+        await getTodo(context, req?.params?.id)
+      } else {
+        await getTodos(context)
+      }
       break
     case 'post':
       await createTodo(context, req.body)
@@ -26,6 +30,20 @@ const httpTrigger: AzureFunction = async function (
 }
 
 export default httpTrigger
+
+async function getTodos(context: Context): Promise<void> {
+  const todos = await prisma.todo.findMany()
+
+  if (todos) {
+    context.res.body = todos.map((todo) => ({
+      id: todo.id,
+      title: todo.todo, // Map the todo column to title
+      completed: todo.completed,
+    }))
+  } else {
+    context.res = { status: 404 }
+  }
+}
 
 async function getTodo(context: Context, id: string): Promise<void> {
   const parsedId = parseInt(id, 10)
@@ -124,7 +142,7 @@ interface InputTodo {
   todo: string
 }
 
-// Function to validate at runtime while giving type safety 
+// Function to validate at runtime while giving type safety
 const isTodo = (todo: unknown): todo is InputTodo => {
   return typeof todo === 'object' && ('todo' in todo || 'completed' in todo)
 }
