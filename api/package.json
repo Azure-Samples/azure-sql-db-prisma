@@ -1,7 +1,20 @@
 {
+  "scripts": {
+    "build": "tsc",
+    "db:push": "prisma db push",
+    "watch": "tsc -w",
+    "prestart": "npm run build && func extensions install",
+    "start:host": "func start",
+    "start": "npm run start:host & npm run watch",
+    "build:production": "npm run prestart && npm prune --production"
+  },
   "dependencies": {
+    "@prisma/client": "2.30.2",
     "dotenv": "^8.2.0",
     "tedious": "^9.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@azure/functions": "^1.2.3",
+    "prisma": "2.30.2"
+  }
 }

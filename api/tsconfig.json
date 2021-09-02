@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ESNext",
+    "outDir": "dist",
+    "rootDir": ".",
+    "sourceRoot": "./functions",
+    "sourceMap": true,
+    "strict": false
+  }
+}

@@ -2,17 +2,15 @@
 page_type: sample
 languages:
 - nodejs
-- javascript
-- tsql
+- typescript
 - sql
-- json
 products:
 - azure
 - vs-code
 - azure-sql-database
 - azure-functions
 - azure-web-apps
-description: "TodoMVC Sample app Full Stack implementation using Azure Static WebApps, Azure Functions, Node, Vue.Js and Azure SQL (full JSON support)"
+description: "TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL (full JSON support)"
 urlFragment: "azure-sql-db-todo-mvc"
 ---
 
@@ -37,6 +35,8 @@ The implementation uses
 - [Azure Static WebApp](https://azure.microsoft.com/en-us/services/app-service/static/): to bind everything together in one easy package, natively integrated with GitHub CI/CD pipeline
 - [Vue.Js](https://vuejs.org/) as front-end client
 - [Azure Function](https://azure.microsoft.com/en-us/services/functions/) for providing serverless back-end infrastructure
+- [Prisma](https://www.prisma.io/) to interact with the Azure SQL database
+- [TypeScript](https://www.typescriptlang.org/) for the back-end logic
 - [NodeJS](https://nodejs.org/en/) for the back-end logic
 - [Azure SQL](https://azure.microsoft.com/en-us/services/sql-database/) as database to store ToDo data
 - [GitHub Actions](https://github.com/features/actions) to Deploy the full-stack website (thanks to Azure Static WebApps)
@@ -53,11 +53,26 @@ More details are available in this blog post: [TodoMVC Full Stack with Azure Sta
 
 ## Setup Database
 
-Execute the `/database/create.sql` script on a database of your choice. Could be a local SQL Server or an Azure SQL running in the cloud. Just make sure the desired database is reachable by your local machine (eg: firewall, authentication and so on), then use SQL Server Management Studio or Azure Data Studio to run the script. 
+Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder. 
+
+Define the database URL using the following format:
+```
+DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER@DB_SERVER_NAME;password={PASSWORD};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30"
+```
+
+The server could be a local SQL Server or an Azure SQL running in the cloud. Just make sure the desired database is reachable by your local machine (eg: firewall, authentication and so on).
+
+To create the database schema, run the following command:
+```
+npx prisma migrate deploy
+```
+
+> **Note:** `prisma migrate deploy` will run the migration in the repository. To automatically create SQL migrations based on changes in your Prisma schema and run them use the `prisma migrate dev` command. If you're using Azure SQL and the `prisma migrate dev` command, you will need to also set the URL of the [shadow database](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) for development purposes.
+
 
 Of course if you want to deploy the solution on Azure, use Azure SQL.
 
-If you need any help in executing the SQL script on Azure SQL, you can find a Quickstart here: [Use Azure Data Studio to connect and query Azure SQL database](https://docs.microsoft.com/en-us/sql/azure-data-studio/quickstart-sql-database).
+To learn more about [Prisma Migrate](https://www.prisma.io/migrate), check out the [Prisma Migrate docs](https://www.prisma.io/docs/concepts/components/prisma-migrate)
 
 If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 

@@ -5,9 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": [
-        "get", "put", "post", "delete"
-      ],
+      "methods": ["get", "put", "post", "delete"],
       "route": "todo/{id:int?}"
     },
     {
@@ -15,5 +13,6 @@
       "direction": "out",
       "name": "res"
     }
-  ]
+  ],
+  "scriptFile": "../dist/TodoFunction/index.js"
 }
