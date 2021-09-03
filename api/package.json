@@ -9,12 +9,12 @@
     "build:production": "npm run prestart && npm prune --production"
   },
   "dependencies": {
-    "@prisma/client": "2.30.2",
+    "@prisma/client": "2.30.3",
     "dotenv": "^8.2.0",
     "tedious": "^9.0.1"
   },
   "devDependencies": {
     "@azure/functions": "^1.2.3",
-    "prisma": "2.30.2"
+    "prisma": "^2.30.3"
   }
 }
