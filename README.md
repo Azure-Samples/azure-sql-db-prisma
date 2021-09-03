@@ -10,7 +10,7 @@ products:
   - azure-sql-database
   - azure-functions
   - azure-web-apps
-description: 'TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL (full JSON support)'
+description: 'TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL'
 urlFragment: 'azure-sql-db-todo-mvc'
 ---
 
@@ -47,7 +47,6 @@ Folder structure
 
 - `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
 - `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST client instead of using local storage in order to save and retrieve todos
-- `/database`: the T-SQL script needed to setup the object in the Azure SQL database. Take a look at the Stored Procedure to see how you can handle JSON right on Azure SQL
 
 More details are available in this blog post: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/)
 
@@ -74,6 +73,8 @@ DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=SA;password=Pr
 ```
 
 ### Install the dependencies
+
+Make sure you have [Node](https://nodejs.org/en/download/) and [TypeScript](https://www.typescriptlang.org/download) installed (via npm)
 
 To install the dependencies, enter the `./api/` folder
 
@@ -112,7 +113,7 @@ npm start
 If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 
 ```
-az sql db create -g <resource-group> -s <server-name> -n resiliency_test --service-objective S0
+az sql db create -g <resource-group> -s <server-name> -n todo_prisma --service-objective S0
 ```
 
 Remember that if you don't have Linux environment where you can run [AZ CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) you can always use the [Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/quickstart). If you prefer to do everything via the portal, here's a tutorial: [Create an Azure SQL Database single database](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal).
@@ -132,7 +133,7 @@ cp ./api/.env.template ./api/.env
 Define the database URL using the following format:
 
 ```
-DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER@DB_SERVER_NAME;password={PASSWORD};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30"
+DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER;password={PASSWORD};encrypt=true;trustServerCertificate=false;loginTimeout=30"
 ```
 
 With the connection string defined, you can continue following the steps from [Install the dependencies](#install-the-dependencies).
@@ -146,7 +147,7 @@ Details on how to run Azure Static WebApps locally can be found here:
 Long story short (make sure you have installed all the prerequisites mentioned in the link above):
 
 - Run Azure Function from within Visual Studio Code (just hit F5 on the `/api` folder)
-- Serve `/client/index.html` using Visual Studio Code Live Server
+- Serve `/client/index.html` using [Visual Studio Code Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
 
 ## Running on Azure
 
