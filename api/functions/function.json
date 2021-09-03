@@ -14,5 +14,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/TodoFunction/index.js"
+  "scriptFile": "../dist/functions/index.js"
 }
