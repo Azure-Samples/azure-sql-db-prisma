@@ -63,7 +63,7 @@
 	</footer>
 
 	<script>
-		API = "api/todo";
+		API = "/api/todo";
 		HEADERS = { 'Accept': 'application/json', 'Content-Type': 'application/json' };		
 
 		// visibility filters
@@ -147,7 +147,7 @@
 							return res.json();
 						}
 					}).then(res => {						
-						this.todos.push(res[0]);
+						this.todos.push(res);
 					})
 				},
 
