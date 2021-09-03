@@ -1,20 +1,20 @@
 ---
 page_type: sample
 languages:
-- nodejs
-- typescript
-- sql
+  - nodejs
+  - typescript
+  - sql
 products:
-- azure
-- vs-code
-- azure-sql-database
-- azure-functions
-- azure-web-apps
-description: "TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL (full JSON support)"
-urlFragment: "azure-sql-db-todo-mvc"
+  - azure
+  - vs-code
+  - azure-sql-database
+  - azure-functions
+  - azure-web-apps
+description: 'TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL (full JSON support)'
+urlFragment: 'azure-sql-db-todo-mvc'
 ---
 
-<!-- 
+<!--
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
 
 Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
@@ -26,7 +26,7 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Serverless Full Stack implementation on Azure of [ToDoMVC](http://todomvc.com/) app. 
+Serverless Full Stack implementation on Azure of [ToDoMVC](http://todomvc.com/) app.
 
 ## Azure Static WebApps, Azure Functions, Node and Azure SQL
 
@@ -51,28 +51,63 @@ Folder structure
 
 More details are available in this blog post: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/)
 
-## Setup Database
+## Local development with SQL Server
 
-Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder. 
+### Start the SQL Server with Docker
 
-Define the database URL using the following format:
-```
-DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER@DB_SERVER_NAME;password={PASSWORD};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30"
-```
+If you want to develop locally without any dependency on Azure, you can run SQL Server locally using the included [docker-compose.yaml](./docker-compose.yml) file with the following command:
 
-The server could be a local SQL Server or an Azure SQL running in the cloud. Just make sure the desired database is reachable by your local machine (eg: firewall, authentication and so on).
-
-To create the database schema, run the following command:
-```
-npx prisma migrate deploy
+```sh
+docker compose up -d
 ```
 
-> **Note:** `prisma migrate deploy` will run the migration in the repository. To automatically create SQL migrations based on changes in your Prisma schema and run them use the `prisma migrate dev` command. If you're using Azure SQL and the `prisma migrate dev` command, you will need to also set the URL of the [shadow database](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) for development purposes.
+Now use the `/api/.env.template` file to create an `.env` file and add the correct information needed to access your SQL Server or Azure SQL.
 
+Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder:
 
-Of course if you want to deploy the solution on Azure, use Azure SQL.
+```sh
+cp ./api/.env.template ./api/.env
+```
 
-To learn more about [Prisma Migrate](https://www.prisma.io/migrate), check out the [Prisma Migrate docs](https://www.prisma.io/docs/concepts/components/prisma-migrate)
+```
+DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=SA;password=Prisma1234;trustServerCertificate=true;encrypt=true
+```
+
+### Install the dependencies
+
+To install the dependencies, enter the `./api/` folder
+
+```sh
+cd api
+```
+
+Install the dependencies:
+
+```sh
+npm i
+```
+
+### Create the database schema
+
+Run the migration to create the database schema using Prisma Migrate:
+
+```sh
+npx prisma migrate dev
+```
+
+> **Note:** If you run the `prisma migrate dev` command with an Azure SQL database, you will need to also set the connection string for the [shadow database](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) which is necessary if you development purposes. To avoid this you can run instead the `prisma migrate deploy` command which will execute existing migrations without the need for a shadow database.
+
+### Start the local development server
+
+Start the TypeScript compiler and Azure Functions Core Tools (development server) with the following command:
+
+```sh
+npm start
+```
+
+## Local development with Azure SQL
+
+### Create the Azure SQL database
 
 If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 
@@ -84,16 +119,32 @@ Remember that if you don't have Linux environment where you can run [AZ CLI](htt
 
 If you are completely new to Azure SQL, no worries! Here's a full playlist that will help you: [Azure SQL for beginners](https://www.youtube.com/playlist?list=PLlrxD0HtieHi5c9-i_Dnxw9vxBY-TqaeN).
 
+### Define the connection string
 
-## Running local
+Prisma will connect to the database using the `DATABASE_URL` environment variable which can be defined in the `./api/.env` file.
 
-Now use the `/api/.env.template` file to create an `.env` file and add the correct information needed to access your SQL Server or Azure SQL.
+Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder:
+
+```sh
+cp ./api/.env.template ./api/.env
+```
+
+Define the database URL using the following format:
+
+```
+DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER@DB_SERVER_NAME;password={PASSWORD};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30"
+```
+
+With the connection string defined, you can continue following the steps from [Install the dependencies](#install-the-dependencies).
+
+## Running the frontend locally
 
 Details on how to run Azure Static WebApps locally can be found here:
 
 [Set up local development for Azure Static Web Apps Preview](https://docs.microsoft.com/en-us/azure/static-web-apps/local-development)
 
 Long story short (make sure you have installed all the prerequisites mentioned in the link above):
+
 - Run Azure Function from within Visual Studio Code (just hit F5 on the `/api` folder)
 - Serve `/client/index.html` using Visual Studio Code Live Server
 
@@ -101,9 +152,9 @@ Long story short (make sure you have installed all the prerequisites mentioned i
 
 This is the amazing part of using Azure Static WebApps. Deploying to Azure is completely automated via GitHub actions.
 
-1. Fork this repository 
+1. Fork this repository
 1. Open the Azure Portal
-1. Create a "Static Web App" resource and follow the instruction here: [Building your first static web app in the Azure portal](https://docs.microsoft.com/en-us/azure/static-web-apps/get-started-portal?tabs=vanilla-javascript), but:  
+1. Create a "Static Web App" resource and follow the instruction here: [Building your first static web app in the Azure portal](https://docs.microsoft.com/en-us/azure/static-web-apps/get-started-portal?tabs=vanilla-javascript), but:
    - When asked for GitHub repo details, point to the forked repo you just created
    - Select "main" as branch
    - Select "Custom" in the "Build Presets" dropdown
@@ -117,6 +168,6 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 1. Go to the "Configuration" tab and add the same key and values that you have in your `.env` file you created earlier for local execution.
 1. Go to "Overview" and click on "Browse" to open your website. Done!
 
-### Azure Static Web App Preview 
+### Azure Static Web App Preview
 
-Azure Static Web App are in Preview and at the moment only support a Free tier...which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
+Azure Static Web App are in Preview and at the moment only support a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
