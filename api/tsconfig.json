@@ -3,9 +3,9 @@
     "module": "CommonJS",
     "target": "ESNext",
     "outDir": "dist",
-    "rootDir": ".",
-    "sourceRoot": "./functions",
+    "rootDir": ".",    
     "sourceMap": true,
-    "strict": false
+    "strict": false,
+    "esModuleInterop": true
   }
 }

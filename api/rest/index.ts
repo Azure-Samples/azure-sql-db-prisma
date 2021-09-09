@@ -3,7 +3,7 @@ import { PrismaClient, Todo } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const httpTrigger: AzureFunction = async function (
+const restHandler: AzureFunction = async function (
   context: Context,
   req: HttpRequest,
 ): Promise<any> {
@@ -29,7 +29,7 @@ const httpTrigger: AzureFunction = async function (
   }
 }
 
-export default httpTrigger
+export default restHandler
 
 async function getTodos(context: Context): Promise<void> {
   const todos = await prisma.todo.findMany()
@@ -144,8 +144,8 @@ const isTodo = (todo: unknown): todo is InputTodo => {
 // The ToDo stored in the database has different name from the ToDo required by the Web Client
 const toClientToDo = (todo: Todo) => {
   return {
-    id: todo.id || undefined,
-    title: todo.todo || undefined,
-    completed: todo.completed || undefined
+    id: todo.id,
+    title: todo.todo,
+    completed: todo.completed
   }
 }
