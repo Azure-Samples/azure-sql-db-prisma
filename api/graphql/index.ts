@@ -1,7 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { PrismaClient, Todo } from '@prisma/client'
 import { ApolloServer, gql } from "apollo-server-azure-functions";
-import { readFileSync } from "fs";
 
 const prisma = new PrismaClient()
 

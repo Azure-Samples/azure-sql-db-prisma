@@ -111,7 +111,7 @@ async function updateTodo(context: Context, id: string, body: unknown) {
     context.res.status = 400
     return
   }
-  console.log(body);
+  
   try {
     const todo = await prisma.todo.update({
       data: {
