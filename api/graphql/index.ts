@@ -15,7 +15,6 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    
     addTodo(
       title: String!,
       completed: Boolean
@@ -29,8 +28,7 @@ const typeDefs = gql`
 
     deleteTodo(
       id: ID!
-    ): Todo
-
+    ): ID
   }
 
   type Todo {
