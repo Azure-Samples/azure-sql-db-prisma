@@ -10,8 +10,8 @@ products:
   - azure-sql-database
   - azure-functions
   - azure-web-apps
-description: 'TodoMVC Sample app Full Stack implementation using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL'
-urlFragment: 'azure-sql-db-todo-mvc'
+description: 'Full Stack TodoMVC Sample app, with REST and GraphQL support, using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL'
+urlFragment: 'azure-sql-db-prisma'
 ---
 
 <!--
@@ -22,11 +22,11 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-# TodoMVC Sample App Full Stack Implementation
+# REST + GraphQL TodoMVC Sample App Full Stack Implementation
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Serverless Full Stack implementation on Azure of [ToDoMVC](http://todomvc.com/) app.
+Serverless Full Stack implementation on Azure of [TodoMVC](http://todomvc.com/) app with support both for REST and GraphQL endpoints via [Prisma](https://www.prisma.io/)
 
 ## Azure Static WebApps, Azure Functions, Node and Azure SQL
 
@@ -46,11 +46,9 @@ The implementation uses
 Folder structure
 
 - `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
-- `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST client instead of using local storage in order to save and retrieve todos
+- `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST or GraphQL client instead of using local storage to save and retrieve todos
 
-More details are available in this blog post: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/)
-
-## Local development with SQL Server
+## Local backend development with SQL Server
 
 ### Start the SQL Server with Docker
 
@@ -60,57 +58,19 @@ If you want to develop locally without any dependency on Azure, you can run SQL 
 docker compose up -d
 ```
 
-Now use the `/api/.env.template` file to create an `.env` file and add the correct information needed to access your SQL Server or Azure SQL.
+Now use the `/api/.env.template` file to create an `.env` file and add the correct information needed to access your SQL Server.
 
-Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder:
-
-```sh
-cp ./api/.env.template ./api/.env
-```
+Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder, and then add the connection string to connect to the local SQL Server, for example:
 
 ```
 DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=SA;password=Prisma1234;trustServerCertificate=true;encrypt=true
 ```
 
-### Install the dependencies
-
-Make sure you have [Node](https://nodejs.org/en/download/) and [TypeScript](https://www.typescriptlang.org/download) installed (via npm)
-
-To install the dependencies, enter the `./api/` folder
-
-```sh
-cd api
-```
-
-Install the dependencies:
-
-```sh
-npm i
-```
-
-### Create the database schema
-
-Run the migration to create the database schema using Prisma Migrate:
-
-```sh
-npx prisma migrate dev
-```
-
-> **Note:** If you run the `prisma migrate dev` command with an Azure SQL database, you will need to also set the connection string for the [shadow database](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) which is necessary if you development purposes. To avoid this you can run instead the `prisma migrate deploy` command which will execute existing migrations without the need for a shadow database.
-
-### Start the local development server
-
-Start the TypeScript compiler and Azure Functions Core Tools (development server) with the following command:
-
-```sh
-npm start
-```
-
-## Local development with Azure SQL
+## Local backend development with Azure SQL
 
 ### Create the Azure SQL database
 
-If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
+Another option is to use an Azure SQL database also as a development database. If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 
 ```
 az sql db create -g <resource-group> -s <server-name> -n todo_prisma --service-objective S0
@@ -124,30 +84,44 @@ If you are completely new to Azure SQL, no worries! Here's a full playlist that 
 
 Prisma will connect to the database using the `DATABASE_URL` environment variable which can be defined in the `./api/.env` file.
 
-Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder:
-
-```sh
-cp ./api/.env.template ./api/.env
-```
-
-Define the database URL using the following format:
+Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder and then define the database URL using the following format:
 
 ```
 DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER;password={PASSWORD};encrypt=true;trustServerCertificate=false;loginTimeout=30"
 ```
 
-With the connection string defined, you can continue following the steps from [Install the dependencies](#install-the-dependencies).
+## Install the dependencies
 
-## Running the frontend locally
+Make sure you have [Node](https://nodejs.org/en/download/) and [TypeScript](https://www.typescriptlang.org/download) installed (via npm)
+
+To install the dependencies, enter the `./api/` folder and install the dependencies:
+
+```sh
+npm install
+```
+
+### Create the database schema
+
+Run the migration to create the database schema using Prisma Migrate:
+
+```sh
+npx prisma migrate dev
+```
+
+> **Note:** If you run the `prisma migrate dev` command with an Azure SQL database, you will need to also set the connection string for the [shadow database](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) which is necessary if you development purposes. To avoid this you can run instead the `prisma migrate deploy` command which will execute existing migrations without the need for a shadow database.
+
+## Start the local development server
 
 Details on how to run Azure Static WebApps locally can be found here:
 
-[Set up local development for Azure Static Web Apps Preview](https://docs.microsoft.com/en-us/azure/static-web-apps/local-development)
+[Set up local development for Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/local-development)
 
 Long story short (make sure you have installed all the prerequisites mentioned in the link above):
 
-- Run Azure Function from within Visual Studio Code (just hit F5 on the `/api` folder)
-- Serve `/client/index.html` using [Visual Studio Code Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Install Azure Static Web Apps CLI: `npm install -g @azure/static-web-apps-cli`
+- Build the solution (in the `./api` folder): `npm run build`
+- Start the servers (in the sample root folder): `swa start --api ./api`
+
 
 ## Running on Azure
 
@@ -169,6 +143,6 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 1. Go to the "Configuration" tab and add the same key and values that you have in your `.env` file you created earlier for local execution.
 1. Go to "Overview" and click on "Browse" to open your website. Done!
 
-### Azure Static Web App Preview
+### Azure Static Web App 
 
-Azure Static Web App are in Preview and at the moment only support a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
+Azure Static Web App supports a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
