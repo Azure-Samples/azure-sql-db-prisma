@@ -182,14 +182,10 @@ class UrlHandler {
   }
 }
 
-const restHandler: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest,
-): Promise<any> {
-
+const restHandler: AzureFunction = async function (context: Context, req: HttpRequest): Promise<any> 
+{
   const uh = new UrlHandler(context, req);
   return uh.Process();
-
 }
 
 export default restHandler

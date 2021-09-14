@@ -32,7 +32,8 @@ jobs:
           output_location: ""
           api_build_command: "npm run build"
           ###### End of Repository/Build Configurations ######
-
+        env: # Add environment variables here
+            NODE_VERSION: 14.17.3
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
