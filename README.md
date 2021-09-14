@@ -118,10 +118,9 @@ Details on how to run Azure Static WebApps locally can be found here:
 
 Long story short (make sure you have installed all the prerequisites mentioned in the link above):
 
-- Install Azure Static Web Apps CLI: `npm install -g @azure/static-web-apps-cli`
+- Install [Azure Static Web Apps CLI](https://github.com/azure/static-web-apps-cli): `npm install -g @azure/static-web-apps-cli`
 - Build the solution (in the `./api` folder): `npm run build`
 - Start the servers (in the sample root folder): `swa start --api ./api`
-
 
 ## Running on Azure
 
@@ -143,6 +142,6 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 1. Go to the "Configuration" tab and add the same key and values that you have in your `.env` file you created earlier for local execution.
 1. Go to "Overview" and click on "Browse" to open your website. Done!
 
-### Azure Static Web App 
+### Azure Static Web App
 
 Azure Static Web App supports a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
