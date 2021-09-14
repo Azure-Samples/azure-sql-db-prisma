@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>TodoMVC</title>
+	<script src="https://unpkg.com/vue"></script>
+	<link rel="stylesheet" type="text/css" href="https://unpkg.com/todomvc-app-css@2.2.0/index.css" />
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<section class="todoapp">
+		<header class="header">
+			<h1>todos</h1>
+			<input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo"
+				@keyup.enter="addTodo" />
+		</header>
+		<section class="main" v-show="todos.length" v-cloak>
+			<input id="toggle-all" @change="completeAll()" class="toggle-all" type="checkbox" v-model="allDone" />
+			<label for="toggle-all"></label>
+			<ul class="todo-list">
+				<li v-for="todo in filteredTodos" class="todo" :key="todo.id"
+					:class="{ completed: todo.completed, editing: todo == editedTodo }">
+					<div class="view">
+						<input @change="completeTodo(todo)" class="toggle" type="checkbox" v-model="todo.completed" />
+						<label @dblclick="editTodo(todo)">{{ todo.title }}</label>
+						<button class="destroy" @click="removeTodo(todo)"></button>
+					</div>
+					<input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo"
+						@blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)" />
+				</li>
+			</ul>
+		</section>
+		<footer class="footer" v-show="todos.length" v-cloak>
+			<span class="todo-count">
+				<strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
+			</span>
+			<ul class="filters">
+				<li>
+					<a href="#/all" :class="{ selected: visibility == 'all' }">All</a>
+				</li>
+				<li>
+					<a href="#/active" :class="{ selected: visibility == 'active' }">Active</a>
+				</li>
+				<li>
+					<a href="#/completed" :class="{ selected: visibility == 'completed' }">Completed</a>
+				</li>
+			</ul>
+			<button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">
+				Clear completed
+			</button>
+		</footer>
+	</section>
+	<footer class="info">
+		<p>Double-click to edit a todo</p>
+		<p>Original <a href="https://github.com/vuejs/vuejs.org/tree/master/src/v2/examples/vue-20-todomvc">Vue.JS Sample</a> by <a href="http://evanyou.me">Evan You</a></p>
+		<p>Azure Function + Azure SQL Backend Sample by <a href="http://davidemauri.it">Davide Mauri</a> and <a href="https://www.prisma.io/">Prisma</a></p>
+		<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+	</footer>
+
+	<script>
+		API = "/api/todo";
+		HEADERS = { 'Accept': 'application/json', 'Content-Type': 'application/json' };		
+
+		// visibility filters
+		var filters = {
+			all: function (todos) {
+				return todos;
+			},
+			active: function (todos) {
+				return todos.filter(function (todo) {
+					return !todo.completed;
+				});
+			},
+			completed: function (todos) {
+				return todos.filter(function (todo) {
+					return todo.completed;
+				});
+			}
+		};
+
+		// app Vue instance
+		var app = new Vue({
+			// app initial state
+			data: {
+				todos: [],
+				newTodo: "",
+				editedTodo: null,
+				visibility: "all"
+			},
+
+			// initialize data 
+			// by loading it from REST API
+			created: function() {
+				fetch(API + "/", {headers: HEADERS, method: "GET"})
+				.then(res => {
+					return res.json();
+				})
+				.then(res => {				
+					this.todos = res == null ? [] : res;
+				})
+			},
+
+			// computed properties
+			// http://vuejs.org/guide/computed.html
+			computed: {
+				filteredTodos: function () {
+					return filters[this.visibility](this.todos);
+				},
+				remaining: function () {
+					return filters.active(this.todos).length;
+				},
+				allDone: {
+					get: function () {
+						return this.remaining === 0;
+					},
+					set: function (value) {
+						this.todos.forEach(function (todo) {
+							todo.completed = value;
+						});
+					}
+				}
+			},
+
+			filters: {
+				pluralize: function (n) {
+					return n === 1 ? "item" : "items";
+				}
+			},
+
+			// methods that implement data logic.
+			// note there's no DOM manipulation here at all.
+			methods: {
+				addTodo: function () {
+					var value = this.newTodo && this.newTodo.trim();
+					if (!value) {
+						return;
+					}
+					fetch(API + "/", {headers: HEADERS, method: "POST", body: JSON.stringify({title: value})})
+					.then(res => {					
+						if (res.ok) {												
+							this.newTodo = ''
+							return res.json();
+						}
+					}).then(res => {						
+						this.todos.push(res);
+					})
+				},
+
+				completeTodo: function(todo) {
+					fetch(API + `/${todo.id}`, {headers: HEADERS, method: "PUT", body: JSON.stringify({completed: todo.completed})});
+				},
+
+				completeAll: function() {
+					this.todos.forEach(t => {
+						fetch(API + `/${t.id}`, {headers: HEADERS, method: "PUT", body: JSON.stringify({completed: t.completed})});
+					})
+				},
+
+				removeTodo: function (todo) {					
+					var id  = todo.id;
+					fetch(API + `/${id}`, {headers: HEADERS, method: "DELETE"}).
+					then(res => {
+						if (res.ok) {
+							var index = this.todos.indexOf(todo);
+							this.todos.splice(index, 1);
+						}
+					})				
+				},
+
+				editTodo: function (todo) {
+					this.beforeEditCache = todo.title;
+					this.editedTodo = todo;
+				},
+
+				doneEdit: function (todo) {
+					if (!this.editedTodo) {
+						return;
+					}
+					this.editedTodo = null;
+					todo.title = todo.title.trim();
+					if (!todo.title) {
+						this.removeTodo(todo);
+					} else {						
+						fetch(API + `/${todo.id}`, {headers: HEADERS, method: "PUT", body: JSON.stringify({title: todo.title})});
+					}
+				},
+
+				cancelEdit: function (todo) {
+					this.editedTodo = null;
+					todo.title = this.beforeEditCache;
+				},
+
+				removeCompleted: function () {
+					filters.completed(this.todos).forEach(t => {						
+						this.removeTodo(t);
+					});					
+				}
+			},
+
+			// a custom directive to wait for the DOM to be updated
+			// before focusing on the input field.
+			// http://vuejs.org/guide/custom-directive.html
+			directives: {
+				"todo-focus": function (el, binding) {
+					if (binding.value) {
+						el.focus();
+					}
+				}
+			}
+		});
+
+		// handle routing
+		function onHashChange() {
+			var visibility = window.location.hash.replace(/#\/?/, "");
+			if (filters[visibility]) {
+				app.visibility = visibility;
+			} else {
+				window.location.hash = "";
+				app.visibility = "all";
+			}
+		}
+
+		window.addEventListener("hashchange", onHashChange);
+		onHashChange();
+
+		// mount
+		app.$mount(".todoapp");
+	</script>
+</body>
+
+</html>

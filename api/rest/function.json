@@ -5,7 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get", "put", "post", "delete"],
+      "methods": ["get", "put", "patch", "post", "delete"],
       "route": "todo/{id:int?}"
     },
     {
