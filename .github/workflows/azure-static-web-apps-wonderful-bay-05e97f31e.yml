@@ -34,7 +34,7 @@ jobs:
         env: # Add environment variables here
           NODE_VERSION: 12     
           PRE_BUILD_COMMAND: "npm install prisma@2.30.3"      
-          CUSTOM_BUILD_COMMAND: "npm install --dev --unsafe-perm && npm run build"     
+          CUSTOM_BUILD_COMMAND: "`prisma generate --schema=/github/workspace/api/prisma/schema.prisma && npm install --dev --unsafe-perm && npm run build"     
           
 
   close_pull_request_job:
