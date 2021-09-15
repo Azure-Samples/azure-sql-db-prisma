@@ -33,7 +33,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
           NODE_VERSION: 12          
-          PRE_BUILD_COMMAND: "npm install prisma@2.30.3 && cp ./node_modules/@prisma/client /github/workspace/api/.oryx_prod_node_modules/@prisma/client"
+          PRE_BUILD_COMMAND: "npm install prisma@2.30.3 && cp -r ./node_modules/@prisma/client /github/workspace/api/.oryx_prod_node_modules/@prisma/client"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
