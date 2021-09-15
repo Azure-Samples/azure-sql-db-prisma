@@ -32,8 +32,8 @@ jobs:
           output_location: ""          
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
-          NODE_VERSION: 12          
-          PRE_BUILD_COMMAND: "npm install --prefix /github/workspace/api/.oryx_prod_node_modules prisma@2.30.3"          
+          NODE_VERSION: 12         
+          CUSTOM_BUILD_COMMAND: "node install"           
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
