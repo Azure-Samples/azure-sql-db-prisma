@@ -33,7 +33,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
           NODE_VERSION: 12         
-          CUSTOM_BUILD_COMMAND: "npm install --also=dev --unsafe-perm && npm run build"     
+          CUSTOM_BUILD_COMMAND: "npm install prisma@2.30.3 && npm install --also=dev --unsafe-perm && npm run build"     
           POST_BUILD_COMMAND: ""      
 
   close_pull_request_job:
