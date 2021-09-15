@@ -1,6 +1,7 @@
-import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { PrismaClient, Todo } from '@prisma/client'
 import { ApolloServer, gql } from "apollo-server-azure-functions";
+
+require('dotenv').config()
 
 const prisma = new PrismaClient()
 

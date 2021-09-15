@@ -1,9 +1,10 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { PrismaClient, Todo } from '@prisma/client'
 
+require('dotenv').config()
+
 const prisma = new PrismaClient()
-var url:URL = null;
-  
+
 // Type definition for the request input of a todo
 interface InputTodo {
   id?: string
@@ -21,7 +22,7 @@ class UrlHandler {
     this.context = context;
     this.req = req;  
     
-    url = new URL(req.url)
+    this.url = new URL(req.url)
   }
 
   public async Process(): Promise<any>
@@ -170,23 +171,22 @@ class UrlHandler {
     return typeof todo === 'object' && ('title' in todo || 'completed' in todo)
   }
   
-  // The ToDo stored in the database has different name from the ToDo required by the Web Client
+  // The to-do stored in the database has different property 
+  // from the to-do class required by the web client
   private toClientToDo(todo: Todo) 
   {
     return {
       id: todo.id,
       title: todo.todo,
       completed: todo.completed,
-      url: `${url.protocol}//${url.hostname}:${url.port}/api/todo/${todo.id}`
+      url: `${this.url.protocol}//${this.url.hostname}:${this.url.port}/api/todo/${todo.id}`
     }
   }
 }
 
 const restHandler: AzureFunction = async function (context: Context, req: HttpRequest): Promise<any> 
 {
-  const uh = new UrlHandler(context, req);
-  return uh.Process();
+  return new UrlHandler(context, req).Process();
 }
 
-export default restHandler
-
+export default restHandler;
