@@ -15,7 +15,7 @@ class UrlHandler {
   context: Context;
   req: HttpRequest;
 
-  url: URL;
+  url: URL;  
 
   constructor(context: Context, req: HttpRequest) {
     this.context = context;
@@ -26,11 +26,11 @@ class UrlHandler {
 
   public async Process(): Promise<any>
   {
-    const method = this.req.method.toLowerCase()    
+    const method = this.req.method.toLowerCase()        
 
     switch (method) {
       case 'get':
-        if (this.req.params?.id) {
+        if (this.req.params.id) {
           await this.getTodo()
         } else {
           await this.getTodos()
@@ -46,7 +46,7 @@ class UrlHandler {
         await this.updateTodo()
         break
       case 'delete':
-        if (this.req.params?.id) {        
+        if (this.req.params.id != null) {        
           await this.deleteTodo()
         } else {
           await this.deleteTodos()
@@ -66,7 +66,7 @@ class UrlHandler {
   }
   
   public async getTodo(): Promise<void> {
-    const parsedId = parseInt(this.req.params?.id, 10)
+    const parsedId = parseInt(this.req.params.id, 10)
 
     if (isNaN(parsedId)) {
       this.context.res.status = 400
@@ -107,7 +107,7 @@ class UrlHandler {
   }
   
   public async deleteTodo(): Promise<void> {
-    const parsedId = parseInt(this.req.params?.id, 10)
+    const parsedId = parseInt(this.req.params.id, 10)
 
     if (isNaN(parsedId)) {
       this.context.res.status = 400
@@ -135,12 +135,12 @@ class UrlHandler {
   }
   
   public async updateTodo(): Promise<void>  {
-    if (!this.isTodo(this.req.body) || !this.req.params?.id) {
+    if (!this.isTodo(this.req.body) || !this.req.params.id) {
       this.context.res.status = 400
       return
     }
   
-    const parsedId = parseInt(this.req.params?.id, 10)
+    const parsedId = parseInt(this.req.params.id, 10)
     
     if (isNaN(parsedId)) {
       this.context.res.status = 400

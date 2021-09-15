@@ -1,4 +1,3 @@
-import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { PrismaClient, Todo } from '@prisma/client'
 import { ApolloServer, gql } from "apollo-server-azure-functions";
 
@@ -73,7 +72,7 @@ const resolvers = {
       return prisma.todo.update({
         data: {
           todo: args.title,
-          completed: args.completed ?? false
+          completed: args.completed
         },
         where: {
           id: parseInt(args.id, 10)
