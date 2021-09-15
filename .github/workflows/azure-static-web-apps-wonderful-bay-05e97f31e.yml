@@ -33,8 +33,8 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
           NODE_VERSION: 12     
-          PRE_BUILD_COMMAND: "npm install --also=dev"      
-          CUSTOM_BUILD_COMMAND: "/github/workspace/api/.oryx_prod_node_modules/node_modules/@prisma/client/prisma generate --schema=../../../../prisma/schema.prisma && npm run build"     
+          PRE_BUILD_COMMAND: "npm install -g prisma@2.30.3"      
+          CUSTOM_BUILD_COMMAND: "prisma generate --schema=../../../../prisma/schema.prisma && npm run build"     
           
 
   close_pull_request_job:
