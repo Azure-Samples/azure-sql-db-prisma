@@ -35,7 +35,7 @@ jobs:
           NODE_VERSION: 12     
           PRE_BUILD_COMMAND: "npm install -g prisma@2.30.3"      
           CUSTOM_BUILD_COMMAND: "npm install @prisma/client && npm run build"               
-          POST_BUILD_COMMAND: "npm install @prisma/client"      
+          POST_BUILD_COMMAND: "npm install @prisma/client && rm -rf /github/workspace/api/node_modules/azure-functions-core-tools"      
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
