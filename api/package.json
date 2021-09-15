@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "prisma generate && tsc",
+    "build": "tsc",
     "db:push": "prisma db push",
     "watch": "tsc -w",
     "prestart": "npm run build && func extensions install",
@@ -9,12 +9,12 @@
     "build:production": "npm run prestart && npm prune --production"
   },
   "dependencies": {
-    "@prisma/client": "2.30.3",
     "@azure/functions": "^1.2.3",
-    "dotenv": "^8.2.0",
-    "tedious": "^9.0.1",
+    "@prisma/client": "^2.30.3",
     "apollo-server-azure-functions": "^2.20.0",
-    "graphql": "^15.5.1"
+    "dotenv": "^8.2.0",
+    "graphql": "^15.5.1",
+    "tedious": "^9.0.1"
   },
   "devDependencies": {
     "azure-functions-core-tools": "^3.0.3568",
