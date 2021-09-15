@@ -32,9 +32,10 @@ jobs:
           output_location: ""          
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
-          NODE_VERSION: 12         
-          CUSTOM_BUILD_COMMAND: "npm install prisma@2.30.3 && npm install --also=dev --unsafe-perm && npm run build"     
-          POST_BUILD_COMMAND: ""      
+          NODE_VERSION: 12     
+          PRE_BUILD_COMMAND: "npm install prisma@2.30.3"      
+          CUSTOM_BUILD_COMMAND: "npm install --dev --unsafe-perm && npm run build"     
+          
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
