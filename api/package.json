@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "db:push": "prisma db push",
     "watch": "tsc -w",
     "prestart": "npm run build && func extensions install",
