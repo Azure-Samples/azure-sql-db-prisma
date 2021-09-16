@@ -32,9 +32,7 @@ jobs:
           output_location: ""          
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
-          NODE_VERSION: 12     
-          PRE_BUILD_COMMAND: "npm install -g prisma@2.30.3"      
-          CUSTOM_BUILD_COMMAND: "npm install @prisma/client && npm run build"               
+          NODE_VERSION: 12                         
           POST_BUILD_COMMAND: "npm install @prisma/client"      
 
   close_pull_request_job:
