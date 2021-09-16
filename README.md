@@ -22,7 +22,7 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-# REST + GraphQL TodoMVC Sample App Full Stack Implementation
+# REST & GraphQL TodoMVC Sample App Full Stack Implementation with Prisma
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
