@@ -43,6 +43,8 @@ The implementation uses
 
 ## Implementation Details
 
+This sample is a variation of the Full-Stack MVC Todo sample described here: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/)
+
 Folder structure
 
 - `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
