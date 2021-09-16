@@ -4,7 +4,7 @@ set -euo pipefail
 # Load values from .env file or create it if it doesn't exists
 FILE=".env"
 if [[ -f $FILE ]]; then
-	echo "Loading from .env" 
+	echo "Loading from $FILE" 
     export $(egrep . $FILE | xargs -n1)
 else
 	cat << EOF > .env
@@ -22,6 +22,10 @@ EOF
 	exit 1
 fi
 
+FILE="./api/.env"
+echo "Loading from $FILE" 
+export $(egrep . $FILE | xargs -n1)
+
 echo "Creating Resource Group...";
 az group create \
     -n $resourceGroup \
@@ -36,7 +40,12 @@ az staticwebapp create \
     -b main \
     --api-location "./api" \
     --app-location "./client" \
-    --output-location "" \
     --token $gitToken 
+
+echo "Configuring Static Web App...";
+az staticwebapp create \
+    -n $appName \
+    -g $resourceGroup \
+    --settings-names DATABASE_URL=$DATABASE_URL
 
 echo "Done."
