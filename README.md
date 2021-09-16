@@ -188,4 +188,4 @@ After you have commited the changes to the workflow file, the CI/CD pipeline wil
 
 ## Azure Static Web App
 
-Azure Static Web App supports a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
+Azure Static Web App supports a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. Initial REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
