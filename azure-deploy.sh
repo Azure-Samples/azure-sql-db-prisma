@@ -42,10 +42,8 @@ az staticwebapp create \
     --app-location "./client" \
     --token $gitToken 
 
-echo "Configuring Static Web App...";
-az staticwebapp create \
-    -n $appName \
-    -g $resourceGroup \
-    --settings-names DATABASE_URL=$DATABASE_URL
+echo "Getting Static Web App...";
+dhn=`az staticwebapp show -g $resourceGroup -n $appName --query "defaultHostname"`
+echo "Static Web App created at: $dhn";
 
 echo "Done."

@@ -146,25 +146,45 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 1. Fork this repository
 1. Get a [GitHub Token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
 1. Run `./azure-deploy.sh`. Please note that if this is the first time you run it, it will create an `.env` file in the root folder. Fill the `.env` file. Run the `./azure-deploy.sh` again.
+1. Once the deployment is done go to the Azure portal, and open the Azure Static Web App resource just created.
+1. Open the "Configuration" pane and add a new environment variable named `DATABASE_URL` and assign the value of the database connection string mentioned before in the local development section.
 1. Done! Well, not really, read next.
 
 ## Fixing generated workflow file
 
-The generated workflow file will not work. Even if the CI/CD pipeline will complete successfully, the Azure Static Web App will not work. This is due to how Onyx, the tool the automate the building and the deployment for Static Web Apps, doesn't now how to properly deal with the nuances of Prisma, that generates the client right away. Fixing this issue is quite easy, just add the following enviroment variable to the workflow, in the "Build and Deploy" step:
+The generated workflow file will not work. Even if the CI/CD pipeline will complete successfully, the Azure Static Web App will not work. This is due to how Onyx, the tool the automate the building and the deployment for Static Web Apps, doesn't now how to properly deal with the nuances of Prisma, that generates the client right away. Fixing this issue is quite easy, just add the following enviroment variable to the workflow.
+
+The workflow file you have to change is in `./github/workflow` and in the name has the name retured by the deployment script. For example if the deployment script reported that:
+
+```sh
+Static Web App created at: gentle-mud-01cd9ba1e.azurestaticapps.net
+```
+
+your workflow file will be `./github/workflow/azure-static-web-apps-gentle-mud-01cd9ba1e.yml`.
+
+You can do the requested small change right from your GitHub repository, if you don't want to clone the forked repo locally. Just after the line:
 
 ```yaml
-env: # Add environment variables here
-  NODE_VERSION: 12     
-  PRE_BUILD_COMMAND: "npm install -g prisma@2.30.3"      
-  CUSTOM_BUILD_COMMAND: "npm install @prisma/client && npm run build"               
-  POST_BUILD_COMMAND: "npm install @prisma/client"      
+###### End of Repository/Build Configurations ######
 ```
+
+in the "Build and Deploy" step, add this environment variables:
+
+```yaml
+    env: # Add environment variables here
+      NODE_VERSION: 12     
+      PRE_BUILD_COMMAND: "npm install -g prisma@2.30.3"      
+      CUSTOM_BUILD_COMMAND: "npm install @prisma/client && npm run build"               
+      POST_BUILD_COMMAND: "npm install @prisma/client"      
+```
+
+Make sure you indent the lines correctly, as requested by YAML syntax, and than commit the change. (If you are using the GitHub online editor, and you don't see any red squiggly lines you should be good to go.)
 
 Take a look at the sample workflow in the `./github/workflow` folder to see how your workflow file should look like.
 
 ## Running on Azure (yep!)
 
-After you have commited the changes to the workflow file, the CI/CD pipeline will run again automatically. Once the pipeline has run,  you should have a working website. Go to http://[your-swa-name].azurestaticapps.net, and enjoy!
+After you have commited the changes to the workflow file, the CI/CD pipeline will run again automatically (You can verify it from the "Action" section of your GitHub repo). Once the pipeline has run, you should have a working website. Go to http://[your-swa-name].azurestaticapps.net, and enjoy!
 
 ## Azure Static Web App
 
