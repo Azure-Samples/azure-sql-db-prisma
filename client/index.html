@@ -4,18 +4,33 @@
 <head>
 	<title>TodoMVC</title>
 	<script src="https://unpkg.com/vue"></script>
-	<link rel="stylesheet" type="text/css" href="https://unpkg.com/todomvc-app-css@2.2.0/index.css" />
+	<link rel="stylesheet" type="text/css" href="https://unpkg.com/todomvc-app-css@2.2.0/index.css" />	
+	<style>
+		li.todo {
+			text-align: center
+		}
+		li.todo label {
+			padding-left:15px
+		}
+		li.todo label a {
+			text-decoration: none;
+			color: inherit;
+		}
+		li.todo label a:hover {
+			text-decoration: underline;
+		}			
+	</style>
 </head>
 
 <body>
 	<section class="todoapp">
 		<header class="header">
-			<h1>todos</h1>
+			<h1>TodoMVC</h1>
 		</header>
 		<section class="main">
-			<ul>
-				<li><a href="client-rest.html">Go to the REST Sample</a></li>
-				<li><a href="client-graphql.html">Go to the GraphQL Sample</a></li>
+			<ul class="todo-list">
+				<li class="todo"><label><a href="client-rest.html">Go to the REST Sample</a></label></li>
+				<li class="todo"><label><a href="client-graphql.html">Go to the GraphQL Sample</a></label></li>
 			</ul>
 		</section>
 	</section>
