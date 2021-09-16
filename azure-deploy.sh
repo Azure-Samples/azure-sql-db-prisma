@@ -32,15 +32,19 @@ az group create \
     -l $location
 
 echo "Deploying Static Web App...";
-az staticwebapp create \
-    -n $appName \
-    -g $resourceGroup \
-    -s $gitSource \
-    -l $location \
-    -b main \
-    --api-location "./api" \
-    --app-location "./client" \
-    --token $gitToken 
+az deployment group create \
+  --name ToDoMVC-SWA \
+  --resource-group $resourceGroup \
+  --template-file azure-deploy.arm.json \
+  --parameters \
+    name=$appName \
+    location=$location \
+    repositoryToken=$gitToken \
+    repositoryUrl=$gitSource \
+    branch=main \
+    appLocation="./client" \
+    apiLocation="./api" \
+    azureSQL=$DATABASE_URL 
 
 echo "Getting Static Web App...";
 dhn=`az staticwebapp show -g $resourceGroup -n $appName --query "defaultHostname"`

@@ -1,0 +1,65 @@
+{
+        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+            "name": {
+                "type": "string"
+            },
+            "location": {
+                "type": "string"
+            },
+            "repositoryUrl": {
+                "type": "string"
+            },
+            "branch": {
+                "type": "string"
+            },
+            "repositoryToken": {
+                "type": "securestring"
+            },
+            "appLocation": {
+                "type": "string"
+            },
+            "apiLocation": {
+                "type": "string"
+            },
+            "azureSQL": {
+                "type": "string"
+            }
+        },
+        "resources": [
+            {
+                "apiVersion": "2021-01-15",
+                "name": "[parameters('name')]",
+                "type": "Microsoft.Web/staticSites",
+                "location": "[parameters('location')]",
+                "properties": {
+                    "repositoryUrl": "[parameters('repositoryUrl')]",
+                    "branch": "[parameters('branch')]",
+                    "repositoryToken": "[parameters('repositoryToken')]",
+                    "buildProperties": {
+                        "appLocation": "[parameters('appLocation')]",
+                        "apiLocation": "[parameters('apiLocation')]"
+                    }
+                },
+                "sku": {
+                    "Tier": "Free",
+                    "Name": "Free"
+                },
+                "resources":[
+                    {
+                        "apiVersion": "2021-01-15",
+                        "name": "appsettings",
+                        "type": "config",
+                        "location": "[parameters('location')]",
+                        "properties": {
+                            "DATABASE_URL": "[parameters('azureSQL')]"                            
+                        },
+                        "dependsOn": [
+                            "[resourceId('Microsoft.Web/staticSites', parameters('name'))]"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
