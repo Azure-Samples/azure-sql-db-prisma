@@ -160,7 +160,7 @@ env: # Add environment variables here
   POST_BUILD_COMMAND: "npm install @prisma/client"      
 ```
 
-Take a look at the template workflow in the `./github/workflow` folder to see how your workflow file should look like.
+Take a look at the sample workflow in the `./github/workflow` folder to see how your workflow file should look like.
 
 ## Running on Azure (yep!)
 
