@@ -137,11 +137,11 @@ Start the Azure Static Web App server (in the root folder):
 swa start --api ./api
 ```
 
-You can now work locally.
+Enjoy the Static Web Site running locally!
 
 ## Running on Azure
 
-This is the amazing part of using Azure Static WebApps. Deploying to Azure is completely automated via GitHub actions.
+This is the amazing part of using Azure Static Web Apps. Deploying to Azure is completely automated via GitHub actions. There are some manual steps because the Static Web Apps CLI is still in Preview at the moment of writing and because Prisma and the Azure Static Web App GitHub Action need some help the get along.
 
 1. Fork this repository
 1. Get a [GitHub Token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
@@ -152,7 +152,7 @@ This is the amazing part of using Azure Static WebApps. Deploying to Azure is co
 
 ## Fixing generated workflow file
 
-The generated workflow file will not work. Even if the CI/CD pipeline will complete successfully, the Azure Static Web App will not work. This is due to how Onyx, the tool the automate the building and the deployment for Static Web Apps, doesn't now how to properly deal with the nuances of Prisma, that generates the client right away. Fixing this issue is quite easy, just add the following enviroment variable to the workflow.
+The generated workflow file will not work. Even if the CI/CD pipeline will complete successfully, the Azure Static Web App will not work. This is due to how [Oryx](https://github.com/Microsoft/Oryx), the tool the automate the building and the deployment for Static Web Apps, doesn't now how to properly deal with the nuances of Prisma, that generates the client right away. Fixing this issue is quite easy, just add the following enviroment variable to the workflow.
 
 The workflow file you have to change is in `./github/workflow` and in the name has the name retured by the deployment script. For example if the deployment script reported that:
 
