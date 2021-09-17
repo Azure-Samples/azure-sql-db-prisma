@@ -146,7 +146,7 @@ Enjoy the Static Web Site running locally!
 This is the amazing part of using Azure Static Web Apps. Deploying to Azure is completely automated via GitHub actions. There are some manual steps because the Static Web Apps CLI is still in Preview at the moment of writing and because Prisma and the Azure Static Web App GitHub Action need some help the get along.
 
 1. Fork this repository
-1. Get a [GitHub Token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+1. Get a [GitHub Token](https://docs.microsoft.com/en-us/azure/static-web-apps/publish-azure-resource-manager?tabs=azure-cli#create-a-github-personal-access-token)
 1. Run `./azure-deploy.sh`. Please note that if this is the first time you run it, it will create an `.env` file in the root folder. Fill the `.env` file. Run the `./azure-deploy.sh` again.
 1. Once the deployment is done go to the Azure portal, and open the Azure Static Web App resource just created.
 1. Open the "Configuration" pane and add a new environment variable named `DATABASE_URL` and assign the value of the database connection string mentioned before in the local development section.
