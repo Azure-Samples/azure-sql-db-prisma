@@ -22,7 +22,7 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-# REST + GraphQL TodoMVC Sample App Full Stack Implementation
+# REST & GraphQL TodoMVC Sample App Full Stack Implementation with Prisma
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -43,7 +43,9 @@ The implementation uses
 
 ## Implementation Details
 
-Folder structure
+This sample is a variation of the Full-Stack MVC Todo sample described here: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/). The difference, of course, is the use of Prisma to have a model-first approach and to support both the REST and GraphQL endpoints.
+
+## Folder Structure
 
 - `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
 - `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST or GraphQL client instead of using local storage to save and retrieve todos
