@@ -5,7 +5,7 @@ set -euo pipefail
 FILE=".env"
 if [[ -f $FILE ]]; then
 	echo "Loading from $FILE" 
-    export $(egrep . $FILE | xargs -n1)
+    export $(egrep "^[^#;]" $FILE | xargs -n1)
 else
 	cat << EOF > .env
 resourceGroup=""
@@ -24,7 +24,7 @@ fi
 
 FILE="./api/.env"
 echo "Loading from $FILE" 
-export $(egrep . $FILE | xargs -n1)
+export $(egrep "^[^#;]" $FILE | xargs -n1)
 
 echo "Creating Resource Group...";
 az group create \
