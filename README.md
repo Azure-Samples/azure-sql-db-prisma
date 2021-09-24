@@ -47,7 +47,10 @@ This sample is a variation of the Full-Stack MVC Todo sample described here: [To
 
 ## Folder Structure
 
-- `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
+- `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client. 
+- `/api/rest`: contains the Azure Function the provides REST endpoint support
+- `/api/graphql`: contains the Azure Function the provides GraphQL endpoint support
+- `/api/prisma`: contains the Prisma model
 - `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST or GraphQL client instead of using local storage to save and retrieve todos
 
 ## Install the dependencies
@@ -187,6 +190,98 @@ Take a look at the sample workflow in the `./github/workflow` folder to see how 
 ## Running on Azure (yep!)
 
 After you have commited the changes to the workflow file, the CI/CD pipeline will run again automatically (You can verify it from the "Action" section of your GitHub repo). Once the pipeline has run, you should have a working website. Go to http://[your-swa-name].azurestaticapps.net, and enjoy!
+
+### REST Endpoint
+
+You can create, update and delete ToDos, that are then in turn stored in Azure SQL, completely via REST using the `/api/todo` endpoint. It support GET, POST, PATCH and DELETE methods. For example using cUrl:
+
+To get all available todos
+```
+curl -s -X GET https://[your-swa-name].azurestaticapps.net/api/todo
+```
+
+To get a specific todo
+```
+curl -s -X GET https://[your-swa-name].azurestaticapps.net/api/todo/123
+```
+
+Create a todo
+```
+curl -H "Content-Type: application/json" -s -X POST https://[your-swa-name].azurestaticapps.net/api/todo/ -d '{"title":"hello world"}'
+```
+
+Update todo
+```
+curl -H "Content-Type: application/json" -X PUT https://[your-swa-name].azurestaticapps.net/api/todo/123 -d '{"title":"world, hello!", "completed":true}'
+```
+
+Delete todo
+```
+curl -X DELETE https://[your-swa-name].azurestaticapps.net/api/todo/123
+```
+
+A sample of REST endpoint usage in a web page is available at `/client-rest.html` page.
+
+### GraphQL Endpoint
+
+The GraphQL endpoint is available at `https://[your-swa-name].azurestaticapps.net/api/todo/graphql` and it provides an interactive GraphQL playground. You can create, update and delete ToDos, that are then in turn stored in Azure SQL, completely via GraphQL.
+
+To get all available todos
+```
+query { 
+  todoList { 
+    id, title, completed 
+  } 
+}
+```
+
+To get a specific todo
+```
+query { 
+  todo(id: 123) { 
+    id, title, completed 
+  } 
+}
+```
+
+Create a todo
+```
+mutation { 
+  addTodo(title: "hello world") 
+  {
+    id, 
+    title, 
+    completed
+  } 
+}
+```
+
+Update todo
+```
+mutation { 
+  updateTodo(id: 123, title: "world, hello") 
+  {
+    id, 
+    title, 
+    completed
+  } 
+}
+```
+
+Delete todo
+```
+mutation { 
+  deleteTodo(id: 123) 
+  {
+    id, 
+    title, 
+    completed
+  } 
+}
+```
+
+A sample of GraphQL endpoint usage in a web page is available at `/client-graphql.html` page.
+
 
 ## Azure Static Web App
 
