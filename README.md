@@ -28,6 +28,12 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 
 Serverless Full Stack implementation on Azure of [TodoMVC](http://todomvc.com/) app with support both for REST and GraphQL endpoints via [Prisma](https://www.prisma.io/)
 
+This sample is a variation of the Full-Stack MVC Todo sample described here: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/). The difference, of course, is the use of Prisma to have **a model-first approach and to support both the REST and GraphQL endpoints**.
+
+This means you can use Typescript to query your database and Prisma will take care of generating and executing the correct SQL query. This way you can focus on creating amazing solution while still having all the power and the feature of Azure SQL at your service. Just like magic!
+
+![Architecture](./assets/architecture.png)
+
 ## Azure Static WebApps, Azure Functions, Node and Azure SQL
 
 The implementation uses
@@ -40,10 +46,6 @@ The implementation uses
 - [Prisma](https://www.prisma.io/) to interact with the Azure SQL database
 - [Azure SQL](https://azure.microsoft.com/en-us/services/sql-database/) as database to store ToDo data
 - [GitHub Actions](https://github.com/features/actions) to Deploy the full-stack website (thanks to Azure Static Web Apps)
-
-## Implementation Details
-
-This sample is a variation of the Full-Stack MVC Todo sample described here: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/). The difference, of course, is the use of Prisma to have a model-first approach and to support both the REST and GraphQL endpoints.
 
 ## Folder Structure
 
@@ -207,12 +209,12 @@ curl -s -X GET https://[your-swa-name].azurestaticapps.net/api/todo/123
 
 Create a todo
 ```
-curl -H "Content-Type: application/json" -s -X POST https://[your-swa-name].azurestaticapps.net/api/todo/ -d '{"title":"hello world"}'
+curl -s -H "Content-Type: application/json" -X POST https://[your-swa-name].azurestaticapps.net/api/todo/ -d '{"title":"Hello world"}'
 ```
 
 Update todo
 ```
-curl -H "Content-Type: application/json" -X PUT https://[your-swa-name].azurestaticapps.net/api/todo/123 -d '{"title":"world, hello!", "completed":true}'
+curl -s -H "Content-Type: application/json" -X PUT https://[your-swa-name].azurestaticapps.net/api/todo/123 -d '{"title":"World, hello!", "completed":true}'
 ```
 
 Delete todo
