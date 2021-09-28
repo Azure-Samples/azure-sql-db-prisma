@@ -43,14 +43,19 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
 
-    todoList: () => {
-      return prisma.todo.findMany().then(value => value.map(todo => toClientToDo(todo)))
+    todoList: (parent, args, context)  => {
+      return prisma.todo.findMany({
+        where: { 
+          ownerId: context.loggedUserId
+        }
+      }).then(value => value.map(todo => toClientToDo(todo)))
     },
 
-    todo: (parent, args) => {
-      return prisma.todo.findUnique({
+    todo: (parent, args, context)  => {
+      return prisma.todo.findFirst({
         where: {
-          id: parseInt(args.id, 10)
+          id: parseInt(args.id, 10),
+          ownerId: context.loggedUserId
         },
       }).then(value => toClientToDo(value))
     }
@@ -59,33 +64,54 @@ const resolvers = {
 
   Mutation: {
 
-    addTodo: (parent, args) => {
+    addTodo: (parent, args, context) => {
       return prisma.todo.create({
         data: {
           todo: args.title,
-          completed: args.completed
+          completed: args.completed,
+          ownerId: context.loggedUserId
         }
       }).then(value => toClientToDo(value))
     },
 
-    updateTodo: (parent, args) => {
-      return prisma.todo.update({
+    updateTodo: (parent, args, context)  => {
+      const parsedId = parseInt(args.id, 10)
+
+      return prisma.todo.updateMany({
         data: {
           todo: args.title,
           completed: args.completed
         },
         where: {
-          id: parseInt(args.id, 10)
+          id: parsedId,
+          ownerId: context.loggedUserId
         }
+      }).then(value => {
+        return prisma.todo.findFirst({
+          where: {
+            id: parsedId,
+            ownerId: context.loggedUserId
+          }
+        })
       }).then(value => toClientToDo(value))
     },
 
-    deleteTodo: (parent, args) => {
-      return prisma.todo.delete({
+    deleteTodo: (parent, args, context)  => {
+      const parsedId = parseInt(args.id, 10)
+
+      return prisma.todo.findFirst({
         where: {
-          id: parseInt(args.id, 10)
+          id: parseInt(args.id, 10),
+          ownerId: context.loggedUserId
         }
-      }).then(value => toClientToDo(value))
+      }).then(value => {
+        return prisma.todo.deleteMany({
+          where: {
+            id: parsedId,
+            ownerId: context.loggedUserId
+          }
+        }).then(_ => toClientToDo(value))
+      })
     }
 
   }
@@ -94,13 +120,35 @@ const resolvers = {
 const toClientToDo = (todo: Todo) => {
   return {
     id: todo.id,
-    title: todo.todo ,
-    completed: todo.completed 
+    title: todo.todo,
+    completed: todo.completed
   }
 }
 
+const getLoggedUserId = (header: string): string => 
+{
+  if (header)
+  {
+    const encoded = Buffer.from(header, 'base64');
+    const decoded = encoded.toString('ascii');
+    return JSON.parse(decoded).userId;    
+  }
+  
+  return "anonymous"
+}
+
 // @ts-ignore
-const server = new ApolloServer({ typeDefs, resolvers, debug: true, playground: true });
+const server = new ApolloServer({ 
+  typeDefs, 
+  resolvers, 
+  debug: true, 
+  playground: true,
+  context: ({ request }) => {        
+    return { 
+      loggedUserId: getLoggedUserId(request.headers['x-ms-client-principal']) 
+    };
+  },
+});
 
 export default server.createHandler({
   cors: {

@@ -2,16 +2,18 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
-  provider        = "prisma-client-js"  
+  provider          = "prisma-client-js"  
 }
 
 model Todo {
-  id        Int     @id @default(autoincrement())
-  todo      String  @db.NVarChar(100)
-  completed Boolean @default(false)
+  id        Int       @id @default(autoincrement())
+  todo      String    @db.NVarChar(100)
+  completed Boolean   @default(false)
+  ownerId   String    @db.VarChar(128)
 }

@@ -123,7 +123,7 @@ Prisma will connect to the database using the `DATABASE_URL` environment variabl
 Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder and then define the database URL using the following format:
 
 ```
-DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER;password={PASSWORD};encrypt=true;trustServerCertificate=false;loginTimeout=30"
+DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER;password=DB_PASSWORD;encrypt=true;trustServerCertificate=false;loginTimeout=30"
 ```
 
 ## Create the database schema
@@ -288,3 +288,9 @@ A sample of GraphQL endpoint usage in a web page is available at `/client-graphq
 ## Azure Static Web App
 
 Azure Static Web App supports a Free tier which is absolutely great so that you can try them for free, but of course don't expect great performances. Initial REST API response will be in the 500 msec area. Keep this in mind if you are planning to use them for something different than testing. If you need better performance right now and cannot when for when Azure Static Web App will be out of preview, you can always deploy the REST API using plain Azure Functions where you can have amazing scalability and performance.
+
+### Authentication
+
+The sample support user authentication via the native Azure Static Web App implementation: [Authentication and authorization for Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/authentication-authorization)
+
+Each todo item has an associated "ownerId" which is the user who has created that item and only that user can view and operate on that todo. If no user is logged in, only items that belongs to the "anonymous" user will be allowed to be created, managed and accessed.

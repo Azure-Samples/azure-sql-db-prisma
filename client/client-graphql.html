@@ -67,6 +67,8 @@
 		</footer>
 	</section>
 	<footer class="info">
+		<label id="login">[<a href=".auth/login/github">login</a>]</label>
+		<label id="logoff">[<a href=".auth/logout">logoff</a>]</label>
 		<p>Double-click to edit a todo</p>
 		<p>Original <a href="https://github.com/vuejs/vuejs.org/tree/master/src/v2/examples/vue-20-todomvc">Vue.JS Sample</a> by <a href="http://evanyou.me">Evan You</a></p>
 		<p>Azure Function + Azure SQL Backend Sample by <a href="http://davidemauri.it">Davide Mauri</a> and <a href="https://www.prisma.io/">Prisma</a></p>
@@ -241,6 +243,21 @@
 
 		// mount
 		app.$mount(".todoapp");
+
+		// check if user has logged in or not
+		async function getUserInfo() {
+			const response = await fetch('/.auth/me');
+			const payload = await response.json();
+			const { clientPrincipal } = payload;
+			if (clientPrincipal?.userId != null )
+			{
+				document.getElementById("login").innerHTML = "Welcome " + clientPrincipal.userDetails;				
+			} else {
+				document.getElementById("logoff").style.display = "none"
+			}
+		}
+
+		getUserInfo();
 	</script>
 </body>
 

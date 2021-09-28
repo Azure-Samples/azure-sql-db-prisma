@@ -9,6 +9,7 @@ interface InputTodo {
   id?: string
   completed?: boolean
   title: string
+  ownerId: string
 }
 
 class UrlHandler {
@@ -16,6 +17,7 @@ class UrlHandler {
   req: HttpRequest;
 
   url: URL;  
+  loggedUserId: string;
 
   constructor(context: Context, req: HttpRequest) {
     this.context = context;
@@ -24,9 +26,24 @@ class UrlHandler {
     url = new URL(req.url)
   }
 
+  public GetLoggedUserId(header: string): string
+  {
+    if (header)
+    {
+      const encoded = Buffer.from(header, 'base64');
+      const decoded = encoded.toString('ascii');
+      return JSON.parse(decoded).userId;    
+    }
+    
+    return "anonymous"
+  }
+
   public async Process(): Promise<any>
   {
     const method = this.req.method.toLowerCase()        
+
+    const header = this.req.headers['x-ms-client-principal'];
+    this.loggedUserId = this.GetLoggedUserId(header);
 
     switch (method) {
       case 'get':
@@ -56,7 +73,11 @@ class UrlHandler {
   }
 
   public async getTodos(): Promise<void> {
-    const todos = await prisma.todo.findMany()
+    const todos = await prisma.todo.findMany({
+      where: {
+        ownerId: this.loggedUserId
+      } 
+    })
   
     if (todos) {
       this.context.res.body = todos.map(todo => this.toClientToDo(todo))
@@ -73,10 +94,11 @@ class UrlHandler {
       return
     }
   
-    const todo = await prisma.todo.findUnique({
+    const todo = await prisma.todo.findFirst({
       where: {
-        id: parsedId
-      },
+        id: parsedId,
+        ownerId: this.loggedUserId
+      }
     })
   
     if (todo) {
@@ -96,7 +118,8 @@ class UrlHandler {
       const todo = await prisma.todo.create({
         data: {
           todo: this.req.body.title,
-          completed: this.req.body.completed
+          completed: this.req.body.completed,
+          ownerId: this.loggedUserId
         },
       })
       this.context.res.body = this.toClientToDo(todo)
@@ -115,11 +138,20 @@ class UrlHandler {
     }
   
     try {
-      const todo = await prisma.todo.delete({
+      const todo = await prisma.todo.findFirst({
         where: {
-          id: parsedId
-        },
+          id: parsedId,
+          ownerId: this.loggedUserId
+        }
       })
+
+      await prisma.todo.deleteMany({
+        where: {
+          id: parsedId,
+          ownerId: this.loggedUserId
+        }
+      })
+
       this.context.res.body = this.toClientToDo(todo)
     } catch (e) {
       this.context.res.status = 500
@@ -128,7 +160,11 @@ class UrlHandler {
   
   public async deleteTodos(): Promise<void>  {
     try {
-      const todo = await prisma.todo.deleteMany()    
+      const todo = await prisma.todo.deleteMany({
+        where: {          
+          ownerId: this.loggedUserId
+        }
+      })    
     } catch (e) {
       this.context.res.status = 500
     }
@@ -148,15 +184,24 @@ class UrlHandler {
     }
     
     try {
-      const todo = await prisma.todo.update({
+      await prisma.todo.updateMany({
         data: {
           todo: this.req.body.title,
           completed: this.req.body.completed 
         },
         where: {
-          id: parsedId
-        },
+          id: parsedId,
+          ownerId: this.loggedUserId
+        }
       })
+      
+      const todo = await prisma.todo.findFirst({
+        where: {
+          id: parsedId,
+          ownerId: this.loggedUserId
+        }
+      })
+
       this.context.res.body = this.toClientToDo(todo)
     } catch (e) {
       this.context.log(e)
@@ -167,7 +212,7 @@ class UrlHandler {
   // Function to validate at runtime while giving type safety
   private isTodo(todo: unknown): todo is InputTodo
   {
-    return typeof todo === 'object' && ('title' in todo || 'completed' in todo)
+    return typeof todo === 'object' && ('title' in todo || 'completed' in todo) 
   }
   
   // The ToDo stored in the database has different name from the ToDo required by the Web Client
