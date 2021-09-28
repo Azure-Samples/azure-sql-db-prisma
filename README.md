@@ -102,7 +102,7 @@ Now use the `/api/.env.template` file to create an `.env` file and add the corre
 Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder, and then add the connection string to connect to the local SQL Server, for example:
 
 ```
-DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=SA;password=Prisma1234;trustServerCertificate=true;encrypt=true
+DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=DB_USER;password=DB_PASSWORD;trustServerCertificate=true;encrypt=true
 ```
 
 ### Option 2 - Create the Azure SQL database
