@@ -47,6 +47,14 @@ The implementation uses
 - [Azure SQL](https://azure.microsoft.com/en-us/services/sql-database/) as database to store ToDo data
 - [GitHub Actions](https://github.com/features/actions) to Deploy the full-stack website (thanks to Azure Static Web Apps)
 
+## Prisma Meetup Recording
+
+This sample has been presented and discussed in the Prisma Meetup 2021 #8. The recording is available here: 
+
+![Session Recording](./assets/prisma-meetup.jpg)
+
+https://www.youtube.com/watch?v=-u2CwW40X0k
+
 ## Folder Structure
 
 - `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client. 
