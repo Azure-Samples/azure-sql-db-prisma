@@ -168,7 +168,6 @@ This is the amazing part of using Azure Static Web Apps. Deploying to Azure is c
 ## Fixing generated workflow file
 
 The generated workflow file will not work. Even if the CI/CD pipeline will complete successfully, the Azure Static Web App will not work. This is due to how [Oryx](https://github.com/Microsoft/Oryx), the tool that automates the building and deployment for Static Web Apps, doesn't now how to properly deal with the nuances of Prisma. Fixing this issue is quite easy, just add the following enviroment variable to the workflow.
-
 The workflow file you have to change is in `./github/workflow`. Note the name returned by the deployment script. For example if the deployment script reported that:
 
 ```sh
