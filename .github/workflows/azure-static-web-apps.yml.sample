@@ -33,9 +33,9 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
           NODE_VERSION: 12       
-          PRE_BUILD_COMMAND: "npm install -g prisma@3.1.1"   
-          CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.1.1 && npm run build"               
-          POST_BUILD_COMMAND: "npm install @prisma/client@3.1.1"      
+          PRE_BUILD_COMMAND: "npm install -g prisma@3.11.0"   
+          CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.11.0" && npm run build"               
+          POST_BUILD_COMMAND: "npm install @prisma/client@3.11.0"      
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

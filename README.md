@@ -201,9 +201,9 @@ in the "Build and Deploy" step, add these environment variables:
 ```yaml
     env: # Add environment variables here
       NODE_VERSION: 12     
-      PRE_BUILD_COMMAND: "npm install -g prisma@3.1.1"      
-      CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.1.1 && npm run build"               
-      POST_BUILD_COMMAND: "npm install @prisma/client@3.1.1"      
+      PRE_BUILD_COMMAND: "npm install -g prisma@3.11.0"      
+      CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.11.0 && npm run build"               
+      POST_BUILD_COMMAND: "npm install @prisma/client@3.11.0"      
 ```
 
 Make sure you indent the lines correctly, as requested by YAML syntax, and than commit the change. (If you are using the GitHub online editor, and you don't see any red squiggly lines you should be good to go.)
