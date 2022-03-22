@@ -112,6 +112,20 @@ DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=DB_USER;passwo
 
 Another option is to use an Azure SQL database also as a development database. If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 
+Make sure you have an existing Azure SQL server, or create a new one (there is no cost associated with an Azure SQL server). Remember that you can use the [Azure Free offering](https://azure.microsoft.com/en-us/free/sql-database/) if needed:
+
+```
+az sql server create -g <resource-group> -n <server-name>  -u <admin-user> -p <admin-password> -l <location>
+```
+
+make sure you can access the server from your client machine by configuring the firewall:
+
+```
+az sql server firewall-rule create --server <server-name> -g <resource-group> --start-ip-address <your-ip> --end-ip-address <your-ip> --name MyClient
+```
+
+then create the Azure SQL database:
+
 ```
 az sql db create -g <resource-group> -s <server-name> -n todo_prisma --service-objective S0
 ```
