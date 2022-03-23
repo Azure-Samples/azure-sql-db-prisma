@@ -163,7 +163,7 @@ npx prisma migrate dev
 Start the Azure Static Web App server (in the root folder):
 
 ```sh
-swa start ./client --api ./api
+swa start ./client --api-location ./api
 ```
 
 Enjoy the Static Web Site running locally!
