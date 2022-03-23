@@ -34,7 +34,7 @@ jobs:
         env: # Add environment variables here
           NODE_VERSION: 12       
           PRE_BUILD_COMMAND: "npm install -g prisma@3.11.0"   
-          CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.11.0" && npm run build"               
+          CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.11.0 && npm run build"               
           POST_BUILD_COMMAND: "npm install @prisma/client@3.11.0"      
 
   close_pull_request_job:
