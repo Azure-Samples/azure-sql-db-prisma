@@ -9,7 +9,7 @@ products:
   - vs-code
   - azure-sql-database
   - azure-functions
-  - azure-web-apps
+  - azure-app-service
 description: 'Full Stack TodoMVC Sample app, with REST and GraphQL support, using Prisma, Azure Static WebApps, Azure Functions, TypeScript, Nodejs, Vue.Js and Azure SQL'
 urlFragment: 'azure-sql-db-prisma'
 ---
