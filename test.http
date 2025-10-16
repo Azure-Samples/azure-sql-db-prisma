@@ -1,0 +1,37 @@
+### REST
+
+GET http://localhost:7071/api/todo
+
+###
+
+GET http://localhost:7071/api/todo/7
+
+###
+
+PUT http://localhost:7071/api/todo/12
+
+{
+    "completed": true
+}
+
+###
+
+POST http://localhost:7071/api/todo
+
+{
+    "title": "New Item",
+    "completed": false,
+    "ownerId": "anonymous"
+}
+
+### GraphQL
+
+POST http://localhost:7071/api/todo/graphql
+
+ {"query":"query { todoList { id, title, completed } }"}
+
+###
+
+POST http://localhost:7071/api/todo/graphql
+
+{"query": "mutation { addTodo(title: \"Test Add\") {id, title, completed } }"}

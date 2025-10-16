@@ -14,14 +14,6 @@ description: 'Full Stack TodoMVC Sample app, with REST and GraphQL support, usin
 urlFragment: 'azure-sql-db-prisma'
 ---
 
-<!--
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
-
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
-
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
-
 # REST & GraphQL TodoMVC Sample App Full Stack Implementation with Prisma
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -79,8 +71,7 @@ Also install the [Azure Static Web Apps CLI](https://github.com/azure/static-web
 
 ```sh
 npm install -g @azure/static-web-apps-cli`
-```
-
+`
 Now you can install the dependencies. Enter the `./api/` folder and install the dependencies:
 
 ```sh

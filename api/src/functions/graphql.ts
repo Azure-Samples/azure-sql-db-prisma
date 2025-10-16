@@ -1,10 +1,11 @@
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { PrismaClient, Todo } from '@prisma/client'
-import { ApolloServer, gql } from "apollo-server-azure-functions";
+import { ApolloServer } from '@apollo/server'
 
 const prisma = new PrismaClient()
 
 // Construct a schema, using GraphQL schema language
-const typeDefs = gql`
+const typeDefs = `
   type Query {
       todo(
         id: ID!
@@ -137,21 +138,61 @@ const getLoggedUserId = (header: string): string =>
   return "anonymous"
 }
 
-// @ts-ignore
 const server = new ApolloServer({ 
   typeDefs, 
-  resolvers, 
-  debug: true, 
-  playground: true,
-  context: ({ request }) => {        
-    return { 
-      loggedUserId: getLoggedUserId(request.headers['x-ms-client-principal']) 
-    };
-  },
+  resolvers
 });
 
-export default server.createHandler({
-  cors: {
-    origin: '*'
-  },
+// Flag to ensure server is started only once
+let serverStarted = false;
+
+const graphqlHandler = async function (req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  try {
+    // Start the server only once
+    if (!serverStarted) {
+      await server.start();
+      serverStarted = true;
+    }
+
+    const loggedUserId = getLoggedUserId(req.headers.get('x-ms-client-principal'));
+    
+    const body = await req.text();
+    const { query, variables, operationName } = JSON.parse(body);
+
+    const result = await server.executeOperation(
+      {
+        query,
+        variables,
+        operationName,
+      },
+      {
+        contextValue: { loggedUserId },
+      }
+    );
+
+    return {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+      body: JSON.stringify(result),
+    };
+  } catch (error) {
+    context.log('GraphQL Error:', error);
+    return {
+      status: 500,
+      body: JSON.stringify({ error: 'Internal server error' }),
+    };
+  }
+};
+
+export default graphqlHandler;
+
+app.http('httpGraphQLTrigger', {
+    methods: ['GET', 'POST'],
+    authLevel: 'anonymous',
+    handler: graphqlHandler,
+    route: "todo/graphql"
 });

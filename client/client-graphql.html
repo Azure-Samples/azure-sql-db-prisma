@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>TodoMVC - GraphQL</title>
 	<script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://unpkg.com/todomvc-app-css@2.2.0/index.css" />
@@ -114,7 +116,7 @@
 					return res.json();
 				})
 				.then(res => {				
-					this.todos = res == null ? [] : res.data.todoList;
+					this.todos = res == null ? [] : res.body.singleResult.data.todoList;
 				})
 			},
 
@@ -160,7 +162,7 @@
 							return res.json();
 						}
 					}).then(res => {						
-						this.todos.push(res.data.addTodo);
+						this.todos.push(res.body.singleResult.data.addTodo);
 					})
 				},
 

@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ESNext",
+    "module": "commonjs",
+    "target": "es6",
     "outDir": "dist",
-    "rootDir": ".",    
+    "rootDir": ".",
     "sourceMap": true,
-    "strict": false,
-    "esModuleInterop": true
+    "strict": false
   }
 }
