@@ -22,7 +22,7 @@ Serverless Full Stack implementation on Azure of [TodoMVC](http://todomvc.com/) 
 
 This sample is a variation of the Full-Stack MVC Todo sample described here: [TodoMVC Full Stack with Azure Static Web Apps, Node and Azure SQL](https://devblogs.microsoft.com/azure-sql/todomvc-full-stack-with-azure-static-web-apps-node-and-azure-sql/). The difference, of course, is the use of Prisma to have **a model-first approach and to support both the REST and GraphQL endpoints**.
 
-This means you can use Typescript to query your database and Prisma will take care of generating and executing the correct SQL query. This way you can focus on creating an amazing solution while still having all the power and the features of Azure SQL at your service. Just like magic!
+This means you can use Typecript to query your database and Prisma will take care of generating and executing the correct SQL query. This way you can focus on creating an amazing solution while still having all the power and the features of Azure SQL at your service. Just like magic!
 
 ![Architecture](./assets/architecture.png)
 
