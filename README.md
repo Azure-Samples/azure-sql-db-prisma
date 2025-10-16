@@ -49,9 +49,9 @@ https://www.youtube.com/watch?v=-u2CwW40X0k
 
 ## Folder Structure
 
-- `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client. 
-- `/api/rest`: contains the Azure Function that provides REST endpoint support
-- `/api/graphql`: contains the Azure Function that provides GraphQL endpoint support
+- `/api`: the NodeJs Azure Function code used to provide the backend API, called by the Vue.Js client
+- `/api/src/functions/rest.ts`: contains the Azure Function that provides REST endpoint support
+- `/api/src/functions/graphql.ts`: contains the Azure Function that provides GraphQL endpoint support
 - `/api/prisma`: contains the Prisma model
 - `/client`: the Vue.Js client. Original source code has been taken from official Vue.js sample and adapted to call a REST or GraphQL client instead of using local storage to save and retrieve todos
 
@@ -59,10 +59,10 @@ https://www.youtube.com/watch?v=-u2CwW40X0k
 
 Make sure you have [Node](https://nodejs.org/en/download/) installed. Since the free tier of Azure Static Web Apps only supports Node 12, it is recommended to use Node 12 for development too.
 
-Also install the [Azure Function Core Tools v3](https://www.npmjs.com/package/azure-functions-core-tools):
+Also install the [Azure Function Core Tools v4](https://www.npmjs.com/package/azure-functions-core-tools):
 
 ```sh
-npm i -g azure-functions-core-tools@3 --unsafe-perm true
+npm i -g azure-functions-core-tools@4
 ```
 
 Make sure this dependency is not included in the `package.json` as otherwise the generated package will be too big for Azure Static Web Apps free tier (deployed .zip can max 10MB size).
@@ -71,11 +71,18 @@ Also install the [Azure Static Web Apps CLI](https://github.com/azure/static-web
 
 ```sh
 npm install -g @azure/static-web-apps-cli`
-`
+```
+
 Now you can install the dependencies. Enter the `./api/` folder and install the dependencies:
 
 ```sh
 npm install
+```
+
+then generate the Prisma client:
+
+```sh
+npx prisma generate
 ```
 
 and then build the solution (always from in the `./api` folder):
@@ -100,7 +107,7 @@ Now use the `/api/.env.template` file to create an `.env` file and add the corre
 
 Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder, and then add the connection string to connect to the local SQL Server, for example:
 
-```
+```sh
 DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=DB_USER;password=DB_PASSWORD;trustServerCertificate=true;encrypt=true
 ```
 
@@ -108,24 +115,23 @@ DATABASE_URL=sqlserver://localhost:1433;database=prisma-demo;user=DB_USER;passwo
 
 > **Beginners:** If you are completely new to Azure SQL, no worries! Here's a full playlist that will help you: [Azure SQL for beginners](https://www.youtube.com/playlist?list=PLlrxD0HtieHi5c9-i_Dnxw9vxBY-TqaeN).
 
-
 Another option is to use an Azure SQL database also as a development database. If you need to create an Azure SQL database from scratch, an Azure SQL S0 database would be more than fine to run the tests.
 
 Make sure you have an existing Azure SQL server, or create a new one (there is no cost associated with an Azure SQL server). Remember that you can use the [Azure Free offering](https://azure.microsoft.com/en-us/free/sql-database/) if needed:
 
-```
+```sh
 az sql server create -g <resource-group> -n <server-name>  -u <admin-user> -p <admin-password> -l <location>
 ```
 
 make sure you can access the server from your client machine by configuring the firewall:
 
-```
+```sh
 az sql server firewall-rule create --server <server-name> -g <resource-group> --start-ip-address <your-ip> --end-ip-address <your-ip> --name MyClient
 ```
 
 then create the Azure SQL database:
 
-```
+```sh
 az sql db create -g <resource-group> -s <server-name> -n todo_prisma --service-objective S0
 ```
 
@@ -135,7 +141,7 @@ Prisma will connect to the database using the `DATABASE_URL` environment variabl
 
 Create a `.env` file by copying [.env.template](./api/.env.template) inside the [./api](./api) folder and then define the database URL using the following format:
 
-```
+```sh
 DATABASE_URL="sqlserver://DB_SERVER_NAME.database.windows.net:1433;database=DB_NAME;user=DB_USER;password=DB_PASSWORD;encrypt=true;trustServerCertificate=false;loginTimeout=30"
 ```
 
@@ -191,10 +197,9 @@ in the "Build and Deploy" step, add these environment variables:
 
 ```yaml
     env: # Add environment variables here
-      NODE_VERSION: 12     
-      PRE_BUILD_COMMAND: "npm install -g prisma@3.11.0"      
-      CUSTOM_BUILD_COMMAND: "npm install @prisma/client@3.11.0 && npm run build"               
-      POST_BUILD_COMMAND: "npm install @prisma/client@3.11.0"      
+      PRE_BUILD_COMMAND: "npm install -g prisma@6.17.1"
+      CUSTOM_BUILD_COMMAND: "npm install @prisma/client@6.17.1 && npm run build"
+      POST_BUILD_COMMAND: "npm install @prisma/client@6.17.1"
 ```
 
 Make sure you indent the lines correctly, as requested by YAML syntax, and than commit the change. (If you are using the GitHub online editor, and you don't see any red squiggly lines you should be good to go.)
@@ -210,28 +215,33 @@ After you have commited the changes to the workflow file, the CI/CD pipeline wil
 You can create, update and delete ToDos, that are then in turn stored in Azure SQL, completely via REST using the `/api/todo` endpoint. It supports GET, POST, PATCH and DELETE methods. For example using cUrl:
 
 Get all available todos
-```
+
+```sh
 curl -s -X GET https://[your-swa-name].azurestaticapps.net/api/todo
 ```
 
 Get a specific todo
-```
+
+```sh
 curl -s -X GET https://[your-swa-name].azurestaticapps.net/api/todo/123
 ```
 
 Create a todo
-```
+
+```sh
 curl -s -H "Content-Type: application/json" -X POST https://[your-swa-name].azurestaticapps.net/api/todo/ -d '{"title":"Hello world"}'
 ```
 
 Update a todo
-```
+
+```sh
 curl -s -H "Content-Type: application/json" -X PUT https://[your-swa-name].azurestaticapps.net/api/todo/123 -d '{"title":"World, hello!", "completed":true}'
 ```
 
 Delete a todo
-```
-curl -X DELETE https://[your-swa-name].azurestaticapps.net/api/todo/123
+
+```sh
+curl -s -X DELETE https://[your-swa-name].azurestaticapps.net/api/todo/123
 ```
 
 A sample of REST endpoint usage in a web page is available at `/client-rest.html` page.
@@ -241,7 +251,8 @@ A sample of REST endpoint usage in a web page is available at `/client-rest.html
 The GraphQL endpoint is available at `https://[your-swa-name].azurestaticapps.net/api/todo/graphql` and it provides an interactive GraphQL playground. You can create, update and delete ToDos, that are then in turn stored in Azure SQL, completely via GraphQL.
 
 Get all available todos
-```
+
+```graphql
 query { 
   todoList { 
     id
@@ -252,7 +263,8 @@ query {
 ```
 
 Get a specific todo
-```
+
+```graphql
 query { 
   todo(id: 123) { 
     id
@@ -263,7 +275,8 @@ query {
 ```
 
 Create a todo
-```
+
+```graphql
 mutation { 
   addTodo(title: "hello world") 
   {
@@ -275,7 +288,8 @@ mutation {
 ```
 
 Update a todo
-```
+
+```graphql
 mutation { 
   updateTodo(id: 123, title: "world, hello") 
   {
@@ -287,7 +301,8 @@ mutation {
 ```
 
 Delete a todo
-```
+
+```graphql
 mutation { 
   deleteTodo(id: 123) 
   {
@@ -299,7 +314,6 @@ mutation {
 ```
 
 A sample of GraphQL endpoint usage in a web page is available at `/client-graphql.html` page.
-
 
 ## Azure Static Web App
 
